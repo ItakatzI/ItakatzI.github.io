@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Itai Katzir • Product & Project Manager</title>
+  <style>
+    /* ==== Reset & Base Styles ==== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ==== Container ==== */
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* ==== Header ==== */
+    .intro {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .intro h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .intro p {
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    /* ==== Sections ==== */
+    .section {
+      margin-bottom: 2rem;
+    }
+    .section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 2px solid #0066cc;
+      display: inline-block;
+      padding-bottom: 0.25rem;
+    }
+    .section ul {
+      list-style: none;
+      margin-top: 1rem;
+    }
+    .section li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+    .section li span.emoji {
+      font-size: 1.3rem;
+      margin-right: 0.5rem;
+    }
+
+    /* ==== Footer ==== */
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 3rem;
+    }
+    .footer a {
+      margin: 0 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      .intro h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header / Introduction -->
+    <div class="intro">
+      <h1>👋 Hi there, I'm Itai</h1>
+      <p>Project &amp; Product Manager—transforming ideas into practical, high-impact solutions.</p>
+    </div>
+
+    <!-- Passion Section -->
+    <div class="section">
+      <h2>💡 What I&rsquo;m passionate about:</h2>
+      <ul>
+        <li><span class="emoji">🤖</span> <strong>Automation &amp; Productivity</strong> — streamlining workflows and boosting efficiency</li>
+        <li><span class="emoji">🕹️</span> <strong>VR &amp; Game Development</strong> — building immersive experiences in Unity and Unreal Engine</li>
+        <li><span class="emoji">🛠️</span> <strong>Development &amp; Systems Thinking</strong> — connecting dots between vision, code, and user experience</li>
+      </ul>
+    </div>
+
+    <!-- About Me Text -->
+    <div class="section">
+      <h2>✨ About Me</h2>
+      <p>I thrive at the intersection of creativity and technology, and I&rsquo;m always looking to build meaningful, innovative projects that make an impact.</p>
+    </div>
+
+    <!-- Contact / Connect -->
+    <div class="section">
+      <h2>📬 Let&rsquo;s connect</h2>
+      <p>Feel free to reach out or collaborate on something exciting!</p>
+      <p>Email: <a href="mailto:katzir66@gmail.com">katzir66@gmail.com</a></p>
+      <p>LinkedIn: <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank" rel="noopener noreferrer">linkedin.com/in/itai-katzir/</a></p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      &copy; "$(new Date().getFullYear())" Itai Katzir. All rights reserved.
+    </div>
+  </div>
+
+  <!-- Optional: smooth scroll or small JS if desired -->
+  <script>
+    // Example: update year dynamically
+    document.querySelector('.footer').innerHTML = `&copy; ${new Date().getFullYear()} Itai Katzir. All rights reserved.`;
+  </script>
+</body>
+</html>
