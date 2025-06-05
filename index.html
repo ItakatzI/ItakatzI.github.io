@@ -400,19 +400,7 @@
         />
         <p>Master of turning wild ideas into polished realities—and sometimes just chasing squirrels in VR.</p>
 
-        <script>
-            const titleEl = document.getElementById("main-title");
-            const typingImg = document.getElementById("typing-svg");
-            const svgUrl = typingImg.getAttribute("data-src");
-            let isLoaded = false;
-
-            titleEl.addEventListener("mouseenter", () => {
-            if (!isLoaded) {
-                typingImg.setAttribute("src", svgUrl);
-                isLoaded = true;
-            }
-            });
-        </script>
+        <!-- The script for typing SVG is included at the end of the body to avoid variable redeclaration issues. -->
     </header>
 
     <!-- About Me -->
