@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png" sizes="64x64">
+  <title>💬 Quotes Collection</title>
+  <style>
+    /* ==== Base Styles ==== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e0e0e0 25%, #f8f8f8 100%);
+      color: #222;
+      line-height:1.6;
+    }
+    a { color:#0066cc; text-decoration:none; transition:color .3s }
+    a:hover { color:#004999 }
+
+    .container {
+      max-width:800px;
+      margin:2rem auto;
+      padding:1.5rem;
+      background:#fff;
+      box-shadow:0 0 10px rgba(0,0,0,0.05);
+      border-radius:8px;
+      animation:fadeIn 1s ease-out forwards;
+      opacity:0;
+    }
+    @keyframes fadeIn { to{ opacity:1 } }
+    @keyframes slideInDown {
+      from{ transform:translateY(-30px); opacity:0 }
+      to{ transform:translateY(0); opacity:1 }
+    }
+
+    /* ==== Header ==== */
+    .post-header {
+      text-align:center;
+      margin-bottom:2rem;
+      animation:slideInDown .8s ease-out forwards;
+      opacity:0;
+      animation-delay:.3s;
+    }
+    .post-header h1 {
+      font-size:2rem;
+      color:#333;
+      display:inline-block;
+      position:relative;
+      cursor:pointer;
+    }
+    .post-header h1::after {
+      content:"";
+      position:absolute;
+      left:50%; bottom:-5px;
+      transform:translateX(-50%) scaleX(0);
+      width:60%; height:3px;
+      background:#0066cc;
+      transform-origin:center;
+      transition:transform .4s ease;
+    }
+    .post-header h1:hover::after {
+      transform:translateX(-50%) scaleX(1);
+    }
+    .post-header .meta {
+      font-size:.9rem;
+      color:#555;
+      margin-top:.5rem;
+    }
+
+    /* ==== Section Title ==== */
+    .section-title {
+      font-size:1.5rem;
+      color:#333;
+      margin:2rem 0 .75rem;
+      position:relative;
+      display:inline-block;
+      padding-bottom:.25rem;
+      animation:slideInDown .8s ease-out forwards;
+      opacity:0;
+    }
+    .section-title::after {
+      content:"";
+      position:absolute;
+      left:50%; bottom:-2px;
+      transform:translateX(-50%);
+      width:80%; height:4px;
+      background:linear-gradient(90deg, #0066cc, #00aaff);
+      border-radius:2px;
+    }
+
+    /* ==== Quotes List ==== */
+    .quotes-list {
+      list-style:none;
+      padding:0;
+      margin-top:1rem;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:1rem;
+    }
+    .quote-item {
+      background:#fdfdfd;
+      padding:1rem 1.25rem;
+      border-left:4px solid #0066cc;
+      border-radius:5px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+      font-style:italic;
+      position:relative;
+      opacity:0;
+      animation:fadeInItem .5s ease-out forwards;
+    }
+    .quote-item:nth-child(1) { animation-delay:.6s }
+    .quote-item:nth-child(2) { animation-delay:.8s }
+    .quote-item:nth-child(3) { animation-delay:1s }
+    /* and so on... */
+    @keyframes fadeInItem { to{ opacity:1 } }
+
+    .quote-item::before {
+      content: "“";
+      font-size:2rem;
+      position:absolute;
+      top:-10px;
+      left:10px;
+      color:rgba(0,0,0,0.1);
+    }
+    .quote-item::after {
+      content: "”";
+      font-size:2rem;
+      position:absolute;
+      bottom:-10px;
+      right:10px;
+      color:rgba(0,0,0,0.1);
+    }
+
+    /* ==== Responsive ==== */
+    @media(max-width:600px) {
+      .container { margin:1rem; padding:1rem }
+      .post-header h1 { font-size:1.5rem }
+      .quotes-list { gap:.75rem }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="post-header">
+      <h1 id="main-title">💬 Quotes Collection</h1>
+      <div class="meta">Dynamically loaded from <code>quotes.txt</code></div>
+    </header>
+
+    <section>
+      <div class="section-title">My Favorite Quotes</div>
+      <ul id="quotes-list" class="quotes-list"></ul>
+    </section>
+  </div>
+
+  <script>
+    // Load and display quotes from quotes.txt
+    fetch('quotes.txt')
+      .then(res => res.text())
+      .then(text => {
+        const list = document.getElementById('quotes-list');
+        const quotes = text.split('\n').filter(line => line.trim().length);
+        quotes.forEach((q, i) => {
+          const li = document.createElement('li');
+          li.className = 'quote-item';
+          li.textContent = q.trim();
+          // Stagger fade-in delays if needed
+          li.style.animationDelay = `${0.6 + i * 0.2}s`;
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error('Failed to load quotes:', err);
+      });
+  </script>
+</body>
+</html>
