@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/img/A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png"
+    sizes="64x64">
+  <title>Itai Katzir • Blog</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+  <div id="nav-placeholder"></div>
+  <div class="container">
+    <header class="header">
+      <h1 id="main-title">📝 Katzir’s Blog</h1>
+      <img id="typing-svg"
+        data-src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&duration=2000&pause=500&color=000000&center=true&vCenter=true&width=400&lines=Insights;Tutorials;Stories;Reflections"
+        alt="Hover to see topics..." />
+    </header>
+
+    <!-- Blog Posts Section -->
+    <section>
+      <div class="section-title">Latest Posts</div>
+      <ul class="blog-list">
+        <li class="post-card">
+          <h2>Building Modular VR Workflows</h2>
+          <div class="meta">June 5, 2025 • 5 min read</div>
+          <p>
+            Discover how I architect modular simulation frameworks in Unreal Engine that empower fast iteration and
+            seamless team collaboration—complete with code snippets and best practices.
+          </p>
+          <a href="#" class="read-more">Read more →</a>
+        </li>
+        <li class="post-card">
+          <h2>Automating Your Productivity Stack</h2>
+          <div class="meta">May 20, 2025 • 4 min read</div>
+          <p>
+            A deep dive into setting up Python, Bash, and Zapier automations to eliminate tedious tasks—plus real-world
+            examples that saved me hours each week.
+          </p>
+          <a href="#" class="read-more">Read more →</a>
+        </li>
+        <li class="post-card">
+          <h2>From Spreadsheets to Systems Thinking</h2>
+          <div class="meta">April 12, 2025 • 6 min read</div>
+          <p>
+            Lessons from my Industrial Engineering background on applying systems thinking to product management—how a
+            simple process map can transform your team’s output.
+          </p>
+          <a href="#" class="read-more">Read more →</a>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    // typing SVG load on hover
+    const titleEl = document.getElementById("main-title");
+    const typingImg = document.getElementById("typing-svg");
+    const svgUrl = typingImg.getAttribute("data-src");
+    let loaded = false;
+    titleEl.addEventListener("mouseenter", () => {
+      if (!loaded) {
+        typingImg.setAttribute("src", svgUrl);
+        loaded = true;
+      }
+    });
+  </script>
+  <script src="scripts/include-nav.js"></script>
+</body>
+
+</html>

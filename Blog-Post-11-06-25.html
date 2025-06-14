@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/img/A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png"
+    sizes="64x64">
+  <title>Behind the Scenes: Crafting My Personal Website with ChatGPT</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+</head>
+
+<body>
+  <div id="nav-placeholder"></div>
+
+  <div class="container">
+    <header class="post-header">
+      <h1 id="main-title">Behind the Scenes: Crafting My Personal Website with ChatGPT</h1>
+      <div class="meta">June 11, 2025 • 8 min read</div>
+      <img src="https://source.unsplash.com/800x400/?code,workspace" alt="Developing code on screen" class="post-image">
+    </header>
+
+    <article>
+      <!-- Introduction -->
+      <p>
+        It all began on a quiet afternoon in Jerusalem, armed with nothing but a rough sketch on paper and a head full
+        of ideas. I wanted a dashboard that wasn’t just another static page, but a living, breathing interface—something
+        you’d expect from a polished SaaS platform, yet simple enough to host on GitHub Pages. My first drawing featured
+        a narrow sidebar, crisp cards for each section, and a bold header that typed out my roles one by one. But as any
+        developer knows, a sketch is just the starting line.
+      </p>
+      <img src="https://source.unsplash.com/800x400/?design,wireframe" alt="Hand-drawn wireframe of dashboard layout"
+        class="post-image">
+
+      <!-- Ideation & Planning -->
+      <p>
+        Before touching a single line of CSS, I spent hours refining the user flow. What should happen when someone
+        clicks the “Stats” icon? How best to transition between “About” and “Experience” without a full page reload? I
+        grabbed coffee, opened my notes app, and listed out every interaction: fade-ins, hover states, active icons.
+        That plan became the backbone of our CSS and JavaScript strategy.
+      </p>
+      <p>
+        I decided on a mobile-first mindset—if it looked and felt smooth on my phone, it would shine on desktop. I
+        tested color contrasts in the morning light of my home office and debated whether my accent color should be the
+        vibrant blue of GitHub’s logos or a subtler gradient. Every choice mattered.
+      </p>
+
+      <!-- Collaboration with ChatGPT -->
+      <p>
+        Enter ChatGPT: my tireless brainstorming partner. I’d paste in my sidebar HTML and ask, “How do I swap full
+        labels for icons only, while keeping the active section highlighted?” Within seconds, I had a snippet that used
+        data attributes and an <code>.active</code> class to toggle visibility. Next, I wondered about smooth
+        fade-ins—ChatGPT suggested leveraging <code>opacity</code> transitions combined with <code>display: none</code>
+        for clean toggles.
+      </p>
+      <img src="https://source.unsplash.com/800x400/?chat,ai" alt="Illustration of AI conversation on screen"
+        class="post-image">
+      <p>
+        That back-and-forth felt less like machine chatter and more like pair programming. When I hit a snag—my skill
+        badges weren’t centering perfectly—ChatGPT identified a missing <code>justify-items: center</code> rule in my
+        grid layout. A single line of CSS, and suddenly my skills lined up like soldiers on parade.
+      </p>
+
+      <!-- Deep Dives & Insights -->
+      <p>
+        Along the way, I picked up techniques I’ll carry forward to every project:
+      </p>
+      <ul>
+        <li><strong>Structure with CSS variables:</strong> Defining <code>--primary-color</code> and
+          <code>--bg-light</code> at the top made global theme changes a single search-and-replace.</li>
+        <li><strong>Lazy-load interactive elements:</strong> By deferring the typing SVG until hover, the initial render
+          stayed snappy and responsive.</li>
+        <li><strong>Semantic HTML for accessibility:</strong> Ensuring each <code>section</code> had an
+          <code>aria-labelledby</code> attribute meant screen readers could navigate seamlessly.</li>
+        <li><strong>Minimal JavaScript:</strong> Rather than a bulky framework, a handful of query selectors and
+          <code>classList.toggle</code> calls did the job with under 2 KB of code.</li>
+      </ul>
+
+      <!-- Code Example -->
+      <p>
+        Here’s a taste of the JavaScript that powers section switching:
+      </p>
+      <pre><code>
+// Grab all sidebar links and sections
+const links = document.querySelectorAll('.nav-menu a');
+const secs  = document.querySelectorAll('section');
+
+links.forEach(link => {
+  link.onclick = e => {
+    e.preventDefault();
+    // deactivate all
+    links.forEach(l => l.parentNode.classList.remove('active'));
+    secs.forEach(s => s.classList.remove('active'));
+    // activate target
+    link.parentNode.classList.add('active');
+    document.getElementById(link.dataset.target).classList.add('active');
+  };
+});
+      </code></pre>
+      <p>
+        Just seventy lines of code—and with the right CSS transitions, each section fades in and out like a scene change
+        in a movie.
+      </p>
+
+      <!-- Design Refinements -->
+      <img src="https://source.unsplash.com/800x400/?code,css" alt="Close-up of CSS code on screen" class="post-image">
+      <p>
+        Design tweaks came in rapid succession. I restored hover animations on the main title, added subtle pulsing to
+        emoji bullets, and ensured the entire content area filled the viewport gracefully. Under ChatGPT’s guidance, I
+        even crafted a unicorn favicon in pure CSS for fun—because who doesn’t love a unicorn?
+      </p>
+      <p>
+        Testing across devices was the final step. My sister’s old tablet handled sidebar toggling smoothly, and my
+        phone’s dark mode respected the gradients perfectly. A quick validation with Lighthouse showed a solid
+        performance score, thanks to minimal dependencies and optimized images.
+      </p>
+
+      <!-- Reflection & Takeaways -->
+      <img src="https://source.unsplash.com/800x400/?teamwork,brainstorm"
+        alt="Illustration of teamwork and brainstorming" class="post-image">
+      <p>
+        Reflecting on this journey, the biggest surprise wasn’t the code—it was how a conversational AI can amplify
+        creativity. ChatGPT never gets tired, offers fresh ideas at odd hours, and reminds me of small best practices
+        (like adding <code>rel="noopener"</code> on external links). It’s the ultimate co-author for modern web
+        projects.
+      </p>
+      <p>
+        Building this unicorn-themed dashboard was a test of design, development, and collaboration. From rough sketches
+        to polished interactions, every line of CSS and JavaScript was informed by a seamless chat. If you’re ready to
+        spin up your own GitHub Pages site with SaaS-grade polish, grab the code from my repository, tweak the
+        variables, and let the magic unfold.
+      </p>
+
+      <!-- Conclusion & Call to Action -->
+      <p>
+        Thanks for reading! If you enjoyed this deep dive, subscribe to the blog for future tutorials on VR simulation,
+        automation hacks, and creative coding. And if you have questions—technical or whimsical—drop me a note via the
+        contact link. Let’s build something epic, together.
+      </p>
+
+      <!-- Read Next -->
+      <div class="read-next">
+        <p>Curious about implementation details? <a href="blog.html">Explore more posts →</a></p>
+      </div>
+    </article>
+  </div>
+  <script src="scripts/include-nav.js"></script>
+
+</body>
+
+</html>
