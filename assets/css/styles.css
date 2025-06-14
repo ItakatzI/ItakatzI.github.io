@@ -62,7 +62,7 @@ a:hover {
 .top-nav a::after {
   content: "";
   position: absolute;
-  left: 50%;
+  left: 13%;
   bottom: -4px;
   width: 0;
   height: 2px;
@@ -167,16 +167,19 @@ a:hover {
 
 /* ==== Typing SVG ==== */
 #typing-svg {
-  margin-top: 1rem;
-  max-width: 100%;
-  height: auto;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
+  display: block;               /* take up its own line under the title */
+  width: auto;
+  height: 50px;                 /* reserve the final height */
+  min-height: 50px;             /* even if not loaded yet */
+  margin: 1rem auto 0;
+  opacity: 0;                   
+  visibility: hidden;           /* hide until hover */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-#main-title:hover+#typing-svg {
+#main-title:hover + #typing-svg {
   opacity: 1;
+  visibility: visible;
 }
 
 /* ==== Section Titles ==== */
