@@ -127,28 +127,33 @@
             </header>
 
             <p>Hey there! If you’re a PM like me—fascinated by game AI but intimidated by all the math-y jargon—this is
-                for you. A few weekends ago I thought, “What if I built a Snake game that plays itself?” Four snakes,
-                each with its own brain: one random, one greedy, one cautious, and one downright smart. The result? The
-                most fun I’ve ever had with vanilla JavaScript.</p>
+                for you. A few weekends ago I thought, “What if I built a Snake game that plays itself?” Seven snakes,
+                each with its own brain:
+                <strong>1. Random</strong>, <strong>2. Greedy</strong>, <strong>3. Tail-Aware</strong>, <strong>4.
+                    Loop-Safe</strong>, <strong>5. Lookahead</strong>, <strong>6. Expectimax</strong>, and <strong>7.
+                    MCTS</strong>.
+                The result? The most fun I’ve ever had with vanilla JavaScript.
+            </p>
             <p>This post is half tutorial, half war story. We’ll explore how each AI works—<strong>why</strong> it makes
                 its moves, not just <em>what</em> it does—and I’ll sprinkle in debugging anecdotes so you can laugh (or
                 cry) along. Ready? <a href="http://ikatzir.com/SnakeAI">Try the live demo first →</a></p>
 
             <h2>🤖 Demystifying Game AI</h2>
-            <p>Game AI in 2025 isn’t about sentient machines; it’s code that makes decisions instead of a player. In
-                Pac-Man, ghosts decide where to go; in Mario, Goombas shuffle along. In Snake, the single question is:
-            </p>
-            <blockquote>Where should the snake move next?</blockquote>
-            <p>We’ll implement four “brains” to answer that question differently.</p>
+            <p>Game AI isn’t magic—it’s code that answers one question:</p>
+            <blockquote>“Where should the snake move next?”</blockquote>
+            <p>Each brain implements a different decision rule, from chaos to clever planning.</p>
 
-            <h2>🎮 Four AIs, One Arena</h2>
+            <h2>🎮 Seven AIs, One Arena</h2>
             <ul>
                 <li>🟥 <strong>Random AI</strong> — zero planning, pure chaos</li>
                 <li>🟧 <strong>Greedy AI</strong> — A* to apple, ignores safety</li>
                 <li>🟨 <strong>Tail-Aware AI</strong> — checks survival after apple</li>
-                <li>🟩 <strong>Smart AI</strong> — adaptive, loop-proof, restarts</li>
+                <li>🟩 <strong>Loop-Safe AI</strong> — adds loop detection & restart</li>
+                <li>🔵 <strong>Lookahead AI</strong> — depth-3 minimax planning</li>
+                <li>🟣 <strong>Expectimax AI</strong> — depth-2 expectimax with chance nodes</li>
+                <li>⚫ <strong>MCTS AI</strong> — Monte Carlo rollouts for expected survival</li>
             </ul>
-            <p>Hosted on GitHub Pages, all in pure HTML/CSS/JS—no frameworks required.</p>
+            <p>All in pure HTML/CSS/JS—no frameworks required.</p>
 
             <h2>📦 Project Structure</h2>
             <pre><code>snake-ai-showdown/
@@ -162,118 +167,136 @@
 
             <h2>🧠 AI Deep Dive: Theory & Code</h2>
 
-            <h3>🟥 Random AI</h3>
-            <p><strong>Theory:</strong> A nondeterministic agent with no memory. Picks any legal move uniformly at
-                random.</p>
-            <pre><code>function randomValidMove() {
+            <h3>1. 🟥 Random AI</h3>
+            <p><strong>Theory:</strong> No planning. Every tick, pick one of the legal neighbors at random.</p>
+            <pre><code>function chooseRandom() {
   const moves = getValidMoves(head);
   return moves[Math.floor(Math.random() * moves.length)];
 }</code></pre>
-            <p><em>Anecdote:</em> I laughed so hard when it bonked itself immediately—I almost fell off my chair.</p>
+            <p><em>Anecdote:</em> It often dies on the very first move—hilarity ensues.</p>
 
-            <h3>🟧 Greedy AI (A*)</h3>
-            <p><strong>Theory:</strong> A* pathfinding finds the shortest path using <code>f(n)=g(n)+h(n)</code>. We use
-                Manhattan distance for <code>h</code>.</p>
-            <pre><code>function greedyMove() {
-  const path = aStar(snakeHead, apple);
+            <h3>2. 🟧 Greedy AI (A*)</h3>
+            <p><strong>Theory:</strong> A* searches for the shortest grid path to the apple using
+                <code>f(n)=g(n)+h(n)</code>, with Manhattan <code>h</code>.
+            </p>
+            <pre><code>function chooseGreedy() {
+  const path = aStar(head, apple);
   return path ? path[1] : null;
 }</code></pre>
-            <p><strong>Why it fails:</strong> It’s brilliant until it traps itself—like running blindly toward success
-                and falling off a cliff.</p>
+            <p>Fast—but blind; it often crashes into its own tail.</p>
 
-            <h3>🟨 Tail-Aware AI</h3>
-            <p><strong>Theory:</strong> Simulate “if I eat this apple, can I still reach my tail?”</p>
-            <pre><code>function tailAwareMove() {
-  const toApple = aStar(head, apple);
-  if (toApple && isSafe(toApple)) {
-    return toApple[1];
-  }
-  const toTail = aStar(head, tail);
-  return toTail ? toTail[1] : randomValidMove();
+            <h3>3. 🟨 Tail-Aware AI</h3>
+            <p><strong>Theory:</strong> “If I take that apple, can I still reach my tail afterward?”</p>
+            <pre><code>function chooseTailAware() {
+  const pA = aStar(head, apple);
+  if (pA && isPathSafe(pA)) return pA[1];
+  const pT = aStar(head, tail);
+  return pT ? pT[1] : chooseRandom();
 }</code></pre>
-            <p><strong>isSafe(path)</strong> clones the snake, “grows” it along the path, then checks via A* whether
-                head→tail remains reachable. My snake started planning better life decisions than I did in my 20s.</p>
+            <p><strong>isPathSafe(path)</strong> simulates growing along <code>path</code> then checks head→tail
+                reachability.</p>
 
-            <h3>🟩 Smart AI</h3>
-            <p><strong>Theory:</strong> Layer behaviors with fallback and loop-escape:</p>
+            <h3>4. 🟩 Loop-Safe AI</h3>
+            <p><strong>Theory:</strong> Tail-Aware plus loop detection & auto-restart:</p>
             <ol>
-                <li>Go for apple if <code>isSafe</code></li>
+                <li>Try apple if safe</li>
                 <li>Else chase tail</li>
-                <li>Else pick a random safe move</li>
-                <li>If stuck (no growth + repeated head spots), <code>restart()</code></li>
+                <li>Else random</li>
+                <li>If stuck (200 ticks + &lt;10 unique heads), <code>restart()</code></li>
             </ol>
-            <pre><code>function smartMove() {
+            <pre><code>function chooseLoopSafe() {
   if (isSafe(pathToApple)) return pathToApple[1];
   if (pathToTail) return pathToTail[1];
-  if (isStuckInLoop()) {
-    restart();
-    return;
-  }
-  return randomValidMove();
+  if (isStuckInLoop()) { restart(); return; }
+  return chooseRandom();
 }</code></pre>
-            <p><em>Loop detection</em>: track last 200 head positions; if fewer than 10 unique and no growth, trigger a
-                reset. No more infinite circles!</p>
+
+            <h3>5. 🔵 Lookahead AI</h3>
+            <p><strong>Theory:</strong> Minimax to depth 3. Simulate your own moves, score each future state by</p>
+            <ul>
+                <li>Distance to apple (closer = better)</li>
+                <li>Available free space (more = safer)</li>
+                <li>Snake length (longer = better)</li>
+            </ul>
+            <pre><code>function chooseLookahead(depth=3) {
+  let best, bestScore = -Infinity;
+  for (let mv of getNeighbors(head)) {
+    const state = simulateState(snake, apple, mv);
+    const score = minimax(state, depth-1);
+    if (score > bestScore) { bestScore = score; best = mv; }
+  }
+  return best;
+}</code></pre>
+
+            <h3>6. 🟣 Expectimax AI</h3>
+            <p><strong>Theory:</strong> Like lookahead, but treat the apple‐spawn as a “chance” node—average over N
+                random spawns.</p>
+            <pre><code>function chooseExpectimax(depth=2) {
+  // maximize over your moves, then average over random apple positions
+}</code></pre>
+
+            <h3>7. ⚫ MCTS AI</h3>
+            <p><strong>Theory:</strong> For each next move, run 15 short random playouts (max 30 steps) on a cloned
+                state,
+                pick the move with highest average survival length.</p>
+            <pre><code>function chooseMCTS(sims=15, maxSteps=30) {
+  // for each move: sum(simulateRandomPlay(simState, maxSteps)); return argmax;
+}</code></pre>
 
             <h2>🔧 Key Functions Explained</h2>
+
             <h3><code>getValidMoves(head)</code></h3>
-            <p>Returns adjacent cells (up/down/left/right) that aren’t walls or body. Used by every AI.</p>
+            <p>Returns adjacent cells not blocked by walls or your body.</p>
 
             <h3><code>aStar(start, goal)</code></h3>
-            <p>Classic A* search. Maintains <code>g</code>, <code>h</code>, <code>f</code> scores and returns the
-                shortest path or <code>null</code>.</p>
+            <p>Classic A* with Manhattan heuristic, returns path[] or <code>null</code>.</p>
 
-            <h3><code>isSafe(path)</code></h3>
-            <p>Simulates following <code>path</code>, grows the snake, and checks tail reachability via BFS/A*—ensures
-                survival after an apple.</p>
+            <h3><code>isPathSafe(path)</code></h3>
+            <p>Grow the snake along <code>path</code> then check head→tail reachability via BFS.</p>
 
             <h3><code>isStuckInLoop()</code></h3>
-            <p>Compares recent head positions to detect stalls. If trapped, we restart.</p>
+            <p>Tracks last 200 head positions—if &lt;10 unique and no length gain, triggers <code>restart()</code>.</p>
 
-            <h3><code>restart()</code></h3>
-            <p>Clears the game interval, resets snake &amp; apple, and starts fresh after a brief pause.</p>
+            <h3><code>simulateState(snake, apple, move)</code></h3>
+            <p>Clones the state, applies one move (grow or pop tail), returns {snake, apple} for planning.</p>
+
+            <h3><code>simulateRandomPlay(state, maxSteps)</code></h3>
+            <p>Simulates random moves up to <code>maxSteps</code>, respawns apples properly—used by MCTS.</p>
 
             <h2>🎨 Styling & Layout</h2>
-            <p>Flexbox for a neat 2×2 grid. Dark cards with neon-green borders for each AI.</p>
-            <pre><code>.flex-container {
-  display: flex; flex-wrap: wrap; gap: 1rem;
-}
-.cell {
-  background: #1b1b1b;
-  border: 2px solid #0f0;
-  border-radius: 12px;
-  padding: 1rem;
-  width: 45vmin;
-}</code></pre>
+            <p>Flexbox + absolute‐positioned canvases for clean tabs. Dark cards, neon borders.</p>
+            <pre><code>.tabs { display:flex; }
+.pane { position:absolute; }
+canvas { aspect-ratio:1/1; }</code></pre>
 
             <h2>🚀 Deploy on GitHub Pages</h2>
             <pre><code>git init
 git add .
-git commit -m "Initial Snake AI Showdown"
+git commit -m "Snake AI Showdown"
 git remote add origin https://github.com/yourusername/snake-ai-showdown.git
 git push -u origin main</code></pre>
-            <p>Then in GitHub: Settings → Pages → Source: main/root. Your demo is live at
+            <p>Then GitHub → Settings → Pages → main / root. Live at
                 <code>yourusername.github.io/snake-ai-showdown</code>.</p>
 
             <h2>🧪 Lessons Learned</h2>
             <ul>
-                <li>AI = decision rules, not magic</li>
-                <li>A* must be tempered with hazard checks</li>
-                <li>Planning + fallback outperforms raw speed</li>
-                <li>Loop detection saves your snake (and sanity)</li>
+                <li>AI = decision rules &amp; planning, not magic</li>
+                <li>A* + safety checks beats raw greed</li>
+                <li>Planning (minimax) &amp; chance‐awareness (expectimax) outlast simple heuristics</li>
+                <li>Monte Carlo sampling can approximate complex strategies in JS</li>
+                <li>Loop detection &amp; restarts are crucial for survival</li>
             </ul>
 
-            <h2>🔮 Next Up: Genetic Algorithms</h2>
-            <p>In Part 2, we’ll let snakes evolve themselves: each with a “DNA” of risk-vs-greed weights, playing
-                hundreds of games, breeding the best performers, and watching AI emerge without hardcoded rules. Get
-                ready for digital evolution!</p>
-            <blockquote>We’re not just coding snakes—we’re cultivating survival of the fittest in JavaScript.
-            </blockquote>
+            <h2>🔮 Next Up: Genetic Algorithms &amp; Beyond</h2>
+            <p>In Part 2, we’ll evolve snakes via a simple GA: genomes of behavior weights, tournaments of survival,
+                breeding the fittest—watch emergent AI without hardcoded rules!</p>
+            <blockquote>Get ready to seed your snakes with DNA and watch evolution unfold in your browser.</blockquote>
 
             <div class="back-link">
                 <a href="Blog.html">← Back to all posts</a>
             </div>
-
         </article>
+
     </main>
     <footer class="site-footer">
         <div class="container">
