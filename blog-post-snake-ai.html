@@ -126,49 +126,31 @@
                 <p class="meta">By Katzir • June 22, 2025</p>
             </header>
 
+            <p>Hey there! If you’re a PM like me—fascinated by game AI but intimidated by all the math-y jargon—this is
+                for you. A few weekends ago I thought, “What if I built a Snake game that plays itself?” Four snakes,
+                each with its own brain: one random, one greedy, one cautious, and one downright smart. The result? The
+                most fun I’ve ever had with vanilla JavaScript.</p>
+            <p>This post is half tutorial, half war story. We’ll explore how each AI works—<strong>why</strong> it makes
+                its moves, not just <em>what</em> it does—and I’ll sprinkle in debugging anecdotes so you can laugh (or
+                cry) along. Ready? <a href="http://ikatzir.com/SnakeAI">Try the live demo first →</a></p>
 
-            <p>Hey there. If you’re a PM like me—fascinated by game AI, but slightly intimidated by all the
-                mathy-sounding stuff—this is for you.</p>
-            <p>A while ago, I had this silly idea: “What if I built a Snake game that plays itself?” You know, like four
-                different snakes, each with its own brain, battling it out on the screen. One moves randomly, one is
-                aggressive, one tries to be clever… and one? One’s actually smart.</p>
-            <p>Turns out, that idea became the most fun I’ve ever had with JavaScript.</p>
-            <p>This post is half tutorial, half story. I’ll walk you through what I built, how it works, and what I
-                learned along the way. If you’ve ever made a <code>for</code> loop and wondered what else you could do,
-                you’re gonna love this.</p>
-            <p>
-                <a href="http://ikatzir.com/SnakeAI">Before we start you can try it yourself </a>
+            <h2>🤖 Demystifying Game AI</h2>
+            <p>Game AI in 2025 isn’t about sentient machines; it’s code that makes decisions instead of a player. In
+                Pac-Man, ghosts decide where to go; in Mario, Goombas shuffle along. In Snake, the single question is:
             </p>
-
-            <h2>🤖 What Is Game AI, Actually?</h2>
-            <p>Before we dive in, let’s demystify “game AI.”</p>
-            <p>It’s not ChatGPT. It’s not Skynet. It’s basically: <em>code that makes decisions instead of a
-                    player.</em></p>
-            <p>In Pac-Man, the ghosts have AI. In Super Mario, the Goombas walk at you like mindless zombies. In Tetris,
-                the AI is you, panicking.</p>
-            <p>In Snake, the decision is super simple:</p>
             <blockquote>Where should the snake move next?</blockquote>
-            <p>So our challenge is: how can we write different versions of that decision logic?</p>
+            <p>We’ll implement four “brains” to answer that question differently.</p>
 
-            <h2>🎮 The Idea: Four AIs, One Arena</h2>
-            <p>Here’s what I wanted:</p>
+            <h2>🎮 Four AIs, One Arena</h2>
             <ul>
-                <li>A landing page with a big button: “Launch Simulation”</li>
-                <li>Four Snake games on the screen at once</li>
-                <li>Each AI playing Snake <em>without</em> human input</li>
-                <li>One AI per canvas:</li>
+                <li>🟥 <strong>Random AI</strong> — zero planning, pure chaos</li>
+                <li>🟧 <strong>Greedy AI</strong> — A* to apple, ignores safety</li>
+                <li>🟨 <strong>Tail-Aware AI</strong> — checks survival after apple</li>
+                <li>🟩 <strong>Smart AI</strong> — adaptive, loop-proof, restarts</li>
             </ul>
-            <ul>
-                <li>🟥 <strong>Random AI</strong> — basically a drunk snake</li>
-                <li>🟧 <strong>Greedy AI</strong> — races to the apple, ignores consequences</li>
-                <li>🟨 <strong>Tail-Aware AI</strong> — thinks before biting</li>
-                <li>🟩 <strong>Smart AI</strong> — actually survives for a while</li>
-            </ul>
-            <p>I wanted it hosted on GitHub Pages so I could show it off.</p>
-            <p>Spoiler: all of this is possible with <strong>just HTML, CSS, and JavaScript</strong>.</p>
+            <p>Hosted on GitHub Pages, all in pure HTML/CSS/JS—no frameworks required.</p>
 
-            <h2>📦 The Setup</h2>
-            <p>I made a folder:</p>
+            <h2>📦 Project Structure</h2>
             <pre><code>snake-ai-showdown/
 ├── index.html
 ├── game.html
@@ -176,106 +158,123 @@
 ├── snake.js
 └── README.md
 </code></pre>
-            <p>Each AI has its own <code>&lt;canvas&gt;</code> and gets its own copy of the Snake game logic.</p>
-            <p>No libraries. No frameworks. Just vibes.</p>
+            <p>Each AI gets its own &lt;canvas&gt; and a fresh copy of the Snake logic.</p>
 
-            <h2>🧠 Let's Talk About the AIs</h2>
+            <h2>🧠 AI Deep Dive: Theory & Code</h2>
 
             <h3>🟥 Random AI</h3>
-            <pre><code>const moves = getValidMoves(head);
-return moves[Math.floor(Math.random() * moves.length)];
-</code></pre>
-            <p>What does it do? Nothing useful. It just wiggles. It’s hilarious.</p>
-            <p>I watched it bonk into itself 3 seconds in and laughed like a maniac.</p>
+            <p><strong>Theory:</strong> A nondeterministic agent with no memory. Picks any legal move uniformly at
+                random.</p>
+            <pre><code>function randomValidMove() {
+  const moves = getValidMoves(head);
+  return moves[Math.floor(Math.random() * moves.length)];
+}</code></pre>
+            <p><em>Anecdote:</em> I laughed so hard when it bonked itself immediately—I almost fell off my chair.</p>
 
             <h3>🟧 Greedy AI (A*)</h3>
-            <p>Then I thought, “Can I make the snake actually <em>try</em> to get the apple?”</p>
-            <p>So I implemented A* — a pathfinding algorithm. Sounds fancy, but it’s like Google Maps with tunnel
-                vision:</p>
-            <pre><code>const path = aStar(snakeHead, apple);
-return path[1]; // take the first step
-</code></pre>
-            <p>It worked. The snake zooms straight to the apple. And then crashes into its own tail. Every time.</p>
+            <p><strong>Theory:</strong> A* pathfinding finds the shortest path using <code>f(n)=g(n)+h(n)</code>. We use
+                Manhattan distance for <code>h</code>.</p>
+            <pre><code>function greedyMove() {
+  const path = aStar(snakeHead, apple);
+  return path ? path[1] : null;
+}</code></pre>
+            <p><strong>Why it fails:</strong> It’s brilliant until it traps itself—like running blindly toward success
+                and falling off a cliff.</p>
 
             <h3>🟨 Tail-Aware AI</h3>
-            <p>New plan: check if the path to the apple still allows tail access afterward.</p>
-            <pre><code>if (isSafe(pathToApple)) return pathToApple[1];
-else return pathToTail[1];
-</code></pre>
-            <p>This blew my mind. It survives <em>way</em> longer. It slows down, loops, waits… it <em>feels</em> smart.
-            </p>
+            <p><strong>Theory:</strong> Simulate “if I eat this apple, can I still reach my tail?”</p>
+            <pre><code>function tailAwareMove() {
+  const toApple = aStar(head, apple);
+  if (toApple && isSafe(toApple)) {
+    return toApple[1];
+  }
+  const toTail = aStar(head, tail);
+  return toTail ? toTail[1] : randomValidMove();
+}</code></pre>
+            <p><strong>isSafe(path)</strong> clones the snake, “grows” it along the path, then checks via A* whether
+                head→tail remains reachable. My snake started planning better life decisions than I did in my 20s.</p>
 
             <h3>🟩 Smart AI</h3>
-            <p>The boss AI combines:</p>
-            <ul>
-                <li>Tail-aware logic</li>
-                <li>Fallbacks to tail-chasing</li>
-                <li>Loop detection</li>
-                <li>Restarting if trapped</li>
-            </ul>
-            <pre><code>if (safeToApple) return pathToApple[1];
-else if (pathToTail) return pathToTail[1];
-else return randomValidMove();
-</code></pre>
+            <p><strong>Theory:</strong> Layer behaviors with fallback and loop-escape:</p>
+            <ol>
+                <li>Go for apple if <code>isSafe</code></li>
+                <li>Else chase tail</li>
+                <li>Else pick a random safe move</li>
+                <li>If stuck (no growth + repeated head spots), <code>restart()</code></li>
+            </ol>
+            <pre><code>function smartMove() {
+  if (isSafe(pathToApple)) return pathToApple[1];
+  if (pathToTail) return pathToTail[1];
+  if (isStuckInLoop()) {
+    restart();
+    return;
+  }
+  return randomValidMove();
+}</code></pre>
+            <p><em>Loop detection</em>: track last 200 head positions; if fewer than 10 unique and no growth, trigger a
+                reset. No more infinite circles!</p>
 
-            <h2>🔁 Loop Detection</h2>
-            <p>Tail-Aware AI could pace in circles. So I added detection:</p>
-            <pre><code>if (growthStalled && repeatingPositions) {{
-  this.restart();
-}}
-</code></pre>
-            <p>It tracks the last 200 head positions and counts uniqueness. Too few = trapped.</p>
+            <h2>🔧 Key Functions Explained</h2>
+            <h3><code>getValidMoves(head)</code></h3>
+            <p>Returns adjacent cells (up/down/left/right) that aren’t walls or body. Used by every AI.</p>
 
-            <h2>🎨 Making It Pretty</h2>
-            <p>CSS Flexbox for layout, styled cards, and dark mode glow.</p>
-            <pre><code>.cell {{
+            <h3><code>aStar(start, goal)</code></h3>
+            <p>Classic A* search. Maintains <code>g</code>, <code>h</code>, <code>f</code> scores and returns the
+                shortest path or <code>null</code>.</p>
+
+            <h3><code>isSafe(path)</code></h3>
+            <p>Simulates following <code>path</code>, grows the snake, and checks tail reachability via BFS/A*—ensures
+                survival after an apple.</p>
+
+            <h3><code>isStuckInLoop()</code></h3>
+            <p>Compares recent head positions to detect stalls. If trapped, we restart.</p>
+
+            <h3><code>restart()</code></h3>
+            <p>Clears the game interval, resets snake &amp; apple, and starts fresh after a brief pause.</p>
+
+            <h2>🎨 Styling & Layout</h2>
+            <p>Flexbox for a neat 2×2 grid. Dark cards with neon-green borders for each AI.</p>
+            <pre><code>.flex-container {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+}
+.cell {
   background: #1b1b1b;
   border: 2px solid #0f0;
   border-radius: 12px;
   padding: 1rem;
-}}
-</code></pre>
+  width: 45vmin;
+}</code></pre>
 
-            <h2>🚀 Hosting on GitHub Pages</h2>
+            <h2>🚀 Deploy on GitHub Pages</h2>
             <pre><code>git init
 git add .
-git commit -m "first commit"
-git remote add origin https://github.com/you/snake-ai-showdown.git
-git push -u origin main
-</code></pre>
-            <p>Then on GitHub: Settings > Pages → set to root folder.</p>
+git commit -m "Initial Snake AI Showdown"
+git remote add origin https://github.com/yourusername/snake-ai-showdown.git
+git push -u origin main</code></pre>
+            <p>Then in GitHub: Settings → Pages → Source: main/root. Your demo is live at
+                <code>yourusername.github.io/snake-ai-showdown</code>.</p>
 
-            <h2>🧪 What I Learned</h2>
+            <h2>🧪 Lessons Learned</h2>
             <ul>
-                <li>AI doesn’t mean complicated. It means “decides things.”</li>
-                <li>A* is powerful but not perfect.</li>
-                <li>You can layer intelligence like Legos.</li>
+                <li>AI = decision rules, not magic</li>
+                <li>A* must be tempered with hazard checks</li>
+                <li>Planning + fallback outperforms raw speed</li>
+                <li>Loop detection saves your snake (and sanity)</li>
             </ul>
 
-            <h2>💡 If You Want To Expand It</h2>
-            <ul>
-                <li>Add score counters</li>
-                <li>Highlight the path</li>
-                <li>Make one player-controlled (!)</li>
-            </ul>
-
-            <h2>🧠 Want to Make This Yourself?</h2>
-            <p>Prompt I started with:</p>
-            <blockquote>
-                "Create a Snake game web simulation in HTML/CSS/JS showing four different Snake AIs playing
-                simultaneously in a 2x2 layout..."
+            <h2>🔮 Next Up: Genetic Algorithms</h2>
+            <p>In Part 2, we’ll let snakes evolve themselves: each with a “DNA” of risk-vs-greed weights, playing
+                hundreds of games, breeding the best performers, and watching AI emerge without hardcoded rules. Get
+                ready for digital evolution!</p>
+            <blockquote>We’re not just coding snakes—we’re cultivating survival of the fittest in JavaScript.
             </blockquote>
 
-            <h2>✨ Final Words</h2>
-            <p>Snake is simple. But when your Smart Snake loops around and grabs another apple like a boss?</p>
-            <p>It feels amazing. And <strong>you built that logic</strong>.</p>
-
-            <div style="margin-top: 2rem;">
+            <div class="back-link">
                 <a href="Blog.html">← Back to all posts</a>
             </div>
+
         </article>
     </main>
-
     <footer class="site-footer">
         <div class="container">
             <p>© 2025 Katzir. All rights reserved.</p>
