@@ -518,3 +518,35 @@ a:hover {
     width: 100%;
   }
 }
+
+@media (max-width: 600px) {
+  /* Give the container just a bit of side padding */
+  .container {
+    margin: 1rem auto;
+    padding: 1rem 0.5rem;
+  }
+
+  /* Reduce card padding, but keep text readable */
+  .exp-item,
+  .post-card,
+  .quote-item {
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+
+  /* Make skill / passion badges full-width and easier to tap */
+  .skills-list li,
+  .passions-list li {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Shrink button width to fit narrower container */
+  .button,
+  .back-button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
