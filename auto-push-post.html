@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Auto Pusher — Keep Your GitHub Streak Alive. A simple tool to automatically push to your GitHub repository to maintain your contribution streak.">
+    <meta name="author" content="Katzir">
+    <title>Auto Pusher — Keep Your GitHub Streak Alive</title>
+    <link rel="icon" href="assets/img/A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png" />
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <style>
+        body {
+            color: #333;
+            background: #f7f7f7;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        .blog-post {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .blog-post h1 {
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .blog-post h2,
+        .blog-post h3 {
+            margin-top: 2rem;
+            color: #2e7df6;
+            font-weight: 600;
+        }
+
+        .meta {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .blog-post p {
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-post pre {
+            background: #f0f0f0;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .blog-post code {
+            background: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Mono', monospace;
+        }
+
+        .blog-post blockquote {
+            border-left: 4px solid #2e7df6;
+            padding-left: 1rem;
+            color: #555;
+            margin: 1.5rem 0;
+        }
+
+        a {
+            color: #2e7df6;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        a:hover {
+            border-color: #2e7df6;
+            color: #2e7df6;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            font-weight: 500;
+        }
+
+        header.site-header,
+        footer.site-footer {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        header.site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #2e7df6;
+        }
+
+        header.site-header .meta {
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        footer.site-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 3rem;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="nav-placeholder" id="nav-placeholder"></div>
+
+    <main class="container">
+        <article class="blog-post">
+            <header class="post-header">
+                <h1>Auto Pusher 🖥️➕🚀</h1>
+                <div class="meta">June 29, 2025 • 6 min read</div>
+            </header>
+
+            <h2>The Origin Story</h2>
+            <p>
+                One evening, after realizing my GitHub streak had dropped once again, I decided enough was enough.
+                I needed a tool to handle those daily “keeping-alive” commits automatically—no babysitting, no extra
+                dependencies.
+                Thus, <strong>Auto Pusher</strong> was born: a small suite of scripts that fetch a free ZenQuotes API
+                quote, append it to <code>quotes.txt</code>, and push to GitHub, all scheduled on Windows via
+                PowerShell.
+            </p>
+
+            <h2>Project Layout</h2>
+            <p>
+                Here’s how I organized the repo:
+            </p>
+            <ul>
+                <li><code>README.md</code> — Overview and instructions</li>
+                <li><code>.env.example</code> — Template for your settings</li>
+                <li><code>auto_commit.sh</code> — The one Bash script that actually does the work</li>
+                <li><code>auto_commit.ps1</code> — PowerShell wrapper to run the Bash script on Windows</li>
+                <li><code>setup.ps1</code> — Installs prerequisites and creates your <code>.env</code></li>
+                <li><code>schedule_tasks.ps1</code> — Registers the daily Windows Task Scheduler job</li>
+                <li><code>quotes.txt</code> — The log file where quotes accumulate</li>
+            </ul>
+
+            <h2><code>README.md</code> — Your First Stop</h2>
+            <p>
+                The README is your doorway. It explains:
+            </p>
+            <ul>
+                <li>Why Auto Pusher exists</li>
+                <li>Prerequisites: Git Bash, <code>jq</code>, and Windows PowerShell</li>
+                <li>Step-by-step install &amp; scheduling</li>
+            </ul>
+            <p>Whenever you need a refresher, this is the file to open:</p>
+            <pre><code>https://github.com/ItakatzI/auto-pusher/blob/main/README.md</code></pre>
+
+            <h2><code>.env.example</code> — Secret Sauce</h2>
+            <p>
+                To avoid hard-coding credentials and file names, I use an environment file.
+                Copy it to <code>.env</code> and fill in your values:
+            </p>
+            <pre><code># .env.example
+GIT_AUTHOR_NAME="Your Name"
+GIT_AUTHOR_EMAIL="you@example.com"
+TARGET_FILE="quotes.txt"</code></pre>
+            <p>
+                This file is <strong>ignored</strong> by Git, so your personal tokens or emails never leak.
+            </p>
+
+            <h2><code>auto_commit.sh</code> — The Heart in Bash</h2>
+            <p>
+                Although this project lives on Windows, I wrote the core in Bash because it’s concise:
+            </p>
+            <pre><code>#!/usr/bin/env bash
+# Load config
+source "$(dirname "$0")/.env"
+
+# Get a quote from the free ZenQuotes API
+QUOTE=$(curl -s https://zenquotes.io/api/random | jq -r '.[0].q')
+
+# Append and commit
+echo "$QUOTE" >> "$TARGET_FILE"
+git add "$TARGET_FILE"
+git commit -m "💬 $QUOTE"
+
+# Push straight to main
+git push origin HEAD:main</code></pre>
+            <p>
+                It <em>must</em> run inside Git Bash or WSL—standard Bash on Windows without Git won’t work.
+            </p>
+
+            <h2><code>auto_commit.ps1</code> — PowerShell Bootstrapper</h2>
+            <p>
+                To integrate with Windows Task Scheduler, I wrap the Bash call in PowerShell:
+            </p>
+            <pre><code># auto_commit.ps1
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location $here
+
+# Ensure Bash is available
+bash --version > $null 2>&1
+
+# Delegate to Bash script
+bash auto_commit.sh</code></pre>
+            <p>
+                This file simply switches to the script’s directory and invokes Bash, making scheduling trivial.
+            </p>
+
+            <h2><code>setup.ps1</code> — One-Click Setup</h2>
+            <p>
+                Rather than manually installing <code>jq</code> and copying <code>.env</code>, I automated it:
+            </p>
+            <pre><code># setup.ps1
+# Install jq if missing
+if (-not (Get-Command jq -ErrorAction SilentlyContinue)) {
+  Write-Host "Installing jq..."
+  # Example: download jq.exe to a tools folder
+}
+
+# Copy .env.example
+Copy-Item .\.env.example .\.env -ErrorAction SilentlyContinue
+Write-Host ".env created. Please edit your credentials."</code></pre>
+            <p>
+                Run this once after cloning to get your environment ready.
+            </p>
+
+            <h2><code>schedule_tasks.ps1</code> — Wake Up and Go</h2>
+            <p>
+                Finally, I register a Scheduled Task that runs <code>auto_commit.ps1</code> daily at 8 pm:
+            </p>
+            <pre><code>$action = New-ScheduledTaskAction -Execute "PowerShell" `
+  -Argument "-NoProfile -WindowStyle Hidden -File `"$PSScriptRoot\auto_commit.ps1`""
+$trigger = New-ScheduledTaskTrigger -Daily -At 20:00
+Register-ScheduledTask -TaskName "AutoPusher" -Action $action -Trigger $trigger</code></pre>
+            <p>
+                Now, every evening you’ll see a fresh commit—and a new quote in your GitHub stats.
+            </p>
+
+            <h2><code>quotes.txt</code> — Your Daily Log</h2>
+            <p>
+                This plain text file is where quotes accumulate.
+                It’s appended to each run, so over time you build a neat archive of inspiration.
+            </p>
+
+            <h2>Lessons Learned &amp; Pitfalls</h2>
+            <ul>
+                <li><strong>Windows Path quirks:</strong> Make sure Git Bash is in your PATH, or the scheduled job will
+                    silently fail.</li>
+                <li><strong>ZenQuotes limits:</strong> Free tier has a rate limit—if you hammer the API, you’ll get
+                    empty responses. Caching or backoff helps.</li>
+                <li><strong>Merge collisions:</strong> Avoid editing <code>quotes.txt</code> manually. The script always
+                    commits straight to <code>main</code> to sidestep conflicts.</li>
+                <li><strong>Scheduler timing:</strong> If your PC is off at 8 pm, Task Scheduler won’t run. Consider the
+                    “Start the task as soon as possible after a scheduled start is missed” option.</li>
+            </ul>
+
+            <h2>Get the Code</h2>
+            <p>
+                Dive in and try it yourself:
+                <a href="https://github.com/ItakatzI/auto-pusher" target="_blank" rel="noopener">
+                    github.com/ItakatzI/auto-pusher
+                </a>
+            </p>
+            <div class="back-link">
+                <a href="Blog.html">← Back to all posts</a>
+            </div>
+        </article>
+
+    </main>
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2025 Katzir. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="scripts/include-nav.js"></script>
+</body>
+
+</html>
