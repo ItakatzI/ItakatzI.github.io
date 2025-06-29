@@ -174,28 +174,118 @@
                 Copy it to <code>.env</code> and fill in your values:
             </p>
             <pre><code># .env.example
-GIT_AUTHOR_NAME="Your Name"
-GIT_AUTHOR_EMAIL="you@example.com"
-TARGET_FILE="quotes.txt"</code></pre>
+REPO_DIR=/c/path/to/your/repo-to-commit
+REPO_ALT=/c/path/to/your/another-repo-to-commit
+REPO_DIR2=C:\Users\path\to\auto-push\folder\quotesForGit
+TARGET_FILE=quotes.txt
+</code></pre>
             <p>
                 This file is <strong>ignored</strong> by Git, so your personal tokens or emails never leak.
             </p>
 
             <h2><code>auto_commit.sh</code> — The Heart in Bash</h2>
             <p>
-                Although this project lives on Windows, I wrote the core in Bash because it’s concise:
+                Although this project lives on Windows, I wrote the core in Bash to keep it lightweight and
+                dependency-free. Its meant to be used on two repositories, alternating between them to contribute to two GitHub repositories.:
             </p>
             <pre><code>#!/usr/bin/env bash
-# Load config
-source "$(dirname "$0")/.env"
 
-# Get a quote from the free ZenQuotes API
-QUOTE=$(curl -s https://zenquotes.io/api/random | jq -r '.[0].q')
+# === Config ===
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ENV_PATH="$SCRIPT_DIR/.env"
+LOG_PATH="$SCRIPT_DIR/push_log.txt"
+# state file to remember which repo was used last time
+LAST_REPO_FILE="$SCRIPT_DIR/.last_repo"
 
-# Append and commit
-echo "$QUOTE" >> "$TARGET_FILE"
-git add "$TARGET_FILE"
-git commit -m "💬 $QUOTE"
+# Log to both file and terminal
+exec > >(tee -a "$LOG_PATH") 2>&1
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting auto_commit.sh"
+
+# === Load .env ===
+if [ -f "$ENV_PATH" ]; then
+  export $(grep -v '^#' "$ENV_PATH" | xargs)
+else
+  echo "[✘] .env file not found at $ENV_PATH"
+  exit 1
+fi
+
+# === Sanity Check ===
+if [ -z "$REPO_DIR" ] || [ -z "$REPO_ALT" ] || [ -z "$TARGET_FILE" ]; then
+  echo "[✘] Missing REPO_DIR, REPO_ALT or TARGET_FILE in .env"
+  exit 1
+fi
+
+# === Choose which repo to use this run ===
+if [ -f "$LAST_REPO_FILE" ]; then
+  LAST=$(cat "$LAST_REPO_FILE")
+else
+  # default so that first run uses REPO_DIR
+  LAST="ALT"
+fi
+
+if [ "$LAST" = "ALT" ]; then
+  REPO="$REPO_DIR"
+  echo "DIR" >"$LAST_REPO_FILE"
+else
+  REPO="$REPO_ALT"
+  echo "ALT" >"$LAST_REPO_FILE"
+fi
+
+echo "[✔] Using repo: $REPO"
+
+cd "$REPO" || {
+  echo "[✘] Failed to cd into $REPO"
+  exit 1
+}
+git pull
+# === Commit settings ===
+MIN_COMMITS=${MIN_COMMITS:-1}
+MAX_COMMITS=2
+NUM_COMMITS=$((RANDOM % (MAX_COMMITS - MIN_COMMITS + 1) + MIN_COMMITS))
+
+echo "[✔] Planning $NUM_COMMITS motivational commits..."
+
+for ((i = 0; i < NUM_COMMITS; i++)); do
+  echo "[→] Commit $((i + 1)) of $NUM_COMMITS"
+
+  # Fetch a quote
+  RESPONSE=$(curl -s https://zenquotes.io/api/random)
+  if [ -z "$RESPONSE" ]; then
+    echo "[!] Failed to fetch quote, skipping..."
+    continue
+  fi
+
+  # Extract and sanitize quote
+  RAW_QUOTE=$(echo "$RESPONSE" | sed -n 's/.*"q":"\([^"]*\)".*/\1/p')
+  RAW_AUTHOR=$(echo "$RESPONSE" | sed -n 's/.*"a":"\([^"]*\)".*/\1/p')
+  if [ -z "$RAW_QUOTE" ] || [ -z "$RAW_AUTHOR" ]; then
+    echo "[!] Invalid quote structure, skipping..."
+    continue
+  fi
+
+  CLEAN_QUOTE=$(echo "$RAW_QUOTE — $RAW_AUTHOR" | iconv -f utf-8 -t ascii//TRANSLIT | tr -cd '\11\12\15\40-\176')
+
+  # Append and commit
+  git checkout -b "NewDailyQuote"
+  printf "# %s\n" "$CLEAN_QUOTE" >>"$TARGET_FILE"
+  git add "$TARGET_FILE"
+  git commit -m "Motivation: \"$CLEAN_QUOTE\" ($(date '+%Y-%m-%d %H:%M:%S'))"
+  git checkout main
+  git merge NewDailyQuote
+  git branch -d NewDailyQuote
+  git push
+
+  echo "[💬] $CLEAN_QUOTE"
+
+  # Windows notification (requires BurntToast module)
+  ESCAPED_QUOTE=$(echo "$CLEAN_QUOTE" | sed "s/'/''/g")
+
+  powershell.exe -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms') | Out-Null; [System.Windows.Forms.MessageBox]::Show('$ESCAPED_QUOTE','Motivation')"
+
+done
+
+echo "[✔] Completed $NUM_COMMITS commits."
 
 # Push straight to main
 git push origin HEAD:main</code></pre>
@@ -203,49 +293,162 @@ git push origin HEAD:main</code></pre>
                 It <em>must</em> run inside Git Bash or WSL—standard Bash on Windows without Git won’t work.
             </p>
 
-            <h2><code>auto_commit.ps1</code> — PowerShell Bootstrapper</h2>
             <p>
-                To integrate with Windows Task Scheduler, I wrap the Bash call in PowerShell:
+                This script does the heavy lifting:
+                It fetches a random quote from ZenQuotes, appends it to <code>quotes.txt</code>, and commits it.
+                It alternates between two repositories to keep your contributions diverse.
+                It also handles basic error checking and logging.
             </p>
-            <pre><code># auto_commit.ps1
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-Set-Location $here
-
-# Ensure Bash is available
-bash --version > $null 2>&1
-
-# Delegate to Bash script
-bash auto_commit.sh</code></pre>
-            <p>
-                This file simply switches to the script’s directory and invokes Bash, making scheduling trivial.
-            </p>
-
             <h2><code>setup.ps1</code> — One-Click Setup</h2>
             <p>
                 Rather than manually installing <code>jq</code> and copying <code>.env</code>, I automated it:
             </p>
-            <pre><code># setup.ps1
-# Install jq if missing
-if (-not (Get-Command jq -ErrorAction SilentlyContinue)) {
-  Write-Host "Installing jq..."
-  # Example: download jq.exe to a tools folder
+            <pre><code>
+                # setup.ps1
+
+# --- Load .env file ---
+function Load-EnvFile {
+    $envPath = Join-Path $PSScriptRoot ".env"
+    if (Test-Path $envPath) {
+        Get-Content $envPath | ForEach-Object {
+            if ($_ -match '^\s*([^#][^=]*)\s*=\s*(.*)\s*$') {
+                [System.Environment]::SetEnvironmentVariable($matches[1].Trim(), $matches[2].Trim())
+            }
+        }
+    } else {
+        Write-Error "[✘] .env file not found at $envPath"
+        exit 1
+    }
 }
 
-# Copy .env.example
-Copy-Item .\.env.example .\.env -ErrorAction SilentlyContinue
-Write-Host ".env created. Please edit your credentials."</code></pre>
+Load-EnvFile
+
+# --- Get paths from .env ---
+$projectPath = $env:REPO_DIR2
+if (-not $projectPath) {
+    Write-Error "[X] REPO_DIR2 not defined in .env"
+    exit 1
+}
+
+$scheduleScript = Join-Path $projectPath "schedule_tasks.ps1"
+$bashScript = Join-Path $projectPath "auto_commit.sh"
+
+if (-not (Test-Path $scheduleScript)) {
+    Write-Error "[X] schedule_tasks.ps1 not found at $scheduleScript"
+    exit 1
+}
+
+if (-not (Test-Path $bashScript)) {
+    Write-Error "[X] auto_commit.sh not found at $bashScript"
+    exit 1
+}
+
+# --- Inform user ---
+Write-Host "[V] Loaded environment variables from .env"
+Write-Host "  > Project path: $projectPath"
+Write-Host "  > Bash script:  $bashScript"
+Write-Host ""
+
+# --- Run today's schedule creation ---
+Write-Host "[→] Running schedule_tasks.ps1 to create today’s random push tasks..."
+powershell.exe -ExecutionPolicy Bypass -File "`"$scheduleScript`""
+
+# --- Schedule the daily randomization task ---
+Write-Host "[→] Scheduling 'WhitespacePushDailyScheduler' at 11:00 AM..."
+
+$dailyTrigger = New-ScheduledTaskTrigger -Daily -At 11:00am
+$dailyAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `"$scheduleScript`""
+
+Register-ScheduledTask -Action $dailyAction -Trigger $dailyTrigger -TaskName "WhitespacePushDailyScheduler" -Description "Daily re-randomization of motivational commit tasks" -Force
+
+Write-Host "[V] Scheduled task 'WhitespacePushDailyScheduler' successfully"
+
+            </code></pre>
             <p>
-                Run this once after cloning to get your environment ready.
+                <p>
+                    Run this once after cloning to get your environment ready. It sets up the necessary paths and registers the daily task.
+                </p>
             </p>
 
             <h2><code>schedule_tasks.ps1</code> — Wake Up and Go</h2>
             <p>
                 Finally, I register a Scheduled Task that runs <code>auto_commit.ps1</code> daily at 8 pm:
             </p>
-            <pre><code>$action = New-ScheduledTaskAction -Execute "PowerShell" `
-  -Argument "-NoProfile -WindowStyle Hidden -File `"$PSScriptRoot\auto_commit.ps1`""
-$trigger = New-ScheduledTaskTrigger -Daily -At 20:00
-Register-ScheduledTask -TaskName "AutoPusher" -Action $action -Trigger $trigger</code></pre>
+            <pre><code># === schedule_tasks.ps1 ===
+
+# --- Log execution ---
+Add-Content -Path "$env:USERPROFILE\push_scheduler_log.txt" -Value "[$(Get-Date)] schedule_tasks.ps1 executed"
+
+# --- Load .env ---
+$envPath = "$PSScriptRoot\.env"
+if (!(Test-Path $envPath)) {
+    Write-Error ".env file not found at $envPath"
+    exit 1
+}
+
+Get-Content $envPath | ForEach-Object {
+    if ($_ -match '^\s*([^#][^=]+?)\s*=\s*(.+)$') {
+        [System.Environment]::SetEnvironmentVariable($matches[1].Trim(), $matches[2].Trim())
+    }
+}
+
+# --- Validate REPO_DIR ---
+$repoDir = $env:REPO_DIR2
+if (-not $repoDir) {
+    Write-Error "REPO_DIR not defined in .env"
+    exit 1
+}
+# Convert /c/... style to Windows path if needed
+$windowsRepoDir = $repoDir 
+# Path to script
+$scriptPath = Join-Path $windowsRepoDir "auto_commit.sh"
+if (-not (Test-Path $scriptPath)) {
+    Write-Error "auto_commit.sh not found at $scriptPath"
+    exit 1
+}
+
+
+
+
+# --- Git Bash path ---
+$bashPath = "C:\Program Files\Git\bin\bash.exe"
+if (-not (Test-Path $bashPath)) {
+    Write-Error "Git Bash not found at $bashPath"
+    exit 1
+}
+
+
+
+# --- Cleanup old tasks ---
+Get-ScheduledTask | Where-Object { $_.TaskName -like "WhitespacePush_*" } | Unregister-ScheduledTask -Confirm:$false
+
+
+
+$logFile = "$env:USERPROFILE\auto_commit_output.log"
+
+# --- Schedule new tasks ---
+$numTasks = Get-Random -Minimum 0 -Maximum 3
+$logFile = "$env:TEMP\push_log.txt"
+
+for ($i = 0; $i -lt $numTasks; $i++) {
+    $hour = Get-Random -Minimum 11 -Maximum 17
+    $minute = Get-Random -Minimum 0 -Maximum 59
+    $time = "{0:D2}:{1:D2}" -f $hour, $minute
+    $taskName = "WhitespacePush_$i"
+
+    # Properly escaped Bash command
+    $bashCommand = "-c `"cd '$repoDir' && bash ./auto_commit.sh | tee -a '$logFile'`""
+
+    $action = New-ScheduledTaskAction -Execute $bashPath -Argument $bashCommand
+    $trigger = New-ScheduledTaskTrigger -Daily -At $time
+
+    Register-ScheduledTask -Action $action -Trigger $trigger -TaskName $taskName -Description "Random motivational push" -Force
+
+    Write-Output "[V] Task $taskName scheduled at $time"
+}
+
+Write-Output "[V] $numTasks task(s) scheduled. Logs go to $logFile"
+</code></pre>
             <p>
                 Now, every evening you’ll see a fresh commit—and a new quote in your GitHub stats.
             </p>
