@@ -150,7 +150,6 @@
                 <li><code>README.md</code> — Overview and instructions</li>
                 <li><code>.env.example</code> — Template for your settings</li>
                 <li><code>auto_commit.sh</code> — The one Bash script that actually does the work</li>
-                <li><code>auto_commit.ps1</code> — PowerShell wrapper to run the Bash script on Windows</li>
                 <li><code>setup.ps1</code> — Installs prerequisites and creates your <code>.env</code></li>
                 <li><code>schedule_tasks.ps1</code> — Registers the daily Windows Task Scheduler job</li>
                 <li><code>quotes.txt</code> — The log file where quotes accumulate</li>
@@ -290,10 +289,6 @@ echo "[✔] Completed $NUM_COMMITS commits."
 # Push straight to main
 git push origin HEAD:main</code></pre>
             <p>
-                It <em>must</em> run inside Git Bash or WSL—standard Bash on Windows without Git won’t work.
-            </p>
-
-            <p>
                 This script does the heavy lifting:
                 It fetches a random quote from ZenQuotes, appends it to <code>quotes.txt</code>, and commits it.
                 It alternates between two repositories to keep your contributions diverse.
@@ -301,7 +296,7 @@ git push origin HEAD:main</code></pre>
             </p>
             <h2><code>setup.ps1</code> — One-Click Setup</h2>
             <p>
-                Rather than manually installing <code>jq</code> and copying <code>.env</code>, I automated it:
+                Rather than manually running the script, I automated it, now its installs, <code>schedule_tasks.ps1</code>, a daily scheduler task that runs the script every day at 11:00 AM, this task will create new tasks to randomly push commits to the GitHub repositories.
             </p>
             <pre><code>
                 # setup.ps1
@@ -372,7 +367,7 @@ Write-Host "[V] Scheduled task 'WhitespacePushDailyScheduler' successfully"
 
             <h2><code>schedule_tasks.ps1</code> — Wake Up and Go</h2>
             <p>
-                Finally, I register a Scheduled Task that runs <code>auto_commit.ps1</code> daily at 8 pm:
+                Finally, <code>schedule_tasks.ps1</code> schedules <code>auto_commit.sh</code> daily in randomize amount and time.:
             </p>
             <pre><code># === schedule_tasks.ps1 ===
 
@@ -450,10 +445,10 @@ for ($i = 0; $i -lt $numTasks; $i++) {
 Write-Output "[V] $numTasks task(s) scheduled. Logs go to $logFile"
 </code></pre>
             <p>
-                Now, every evening you’ll see a fresh commit—and a new quote in your GitHub stats.
+                Now, every day you’ll have  fresh commits —and a new quotes in your GitHub repo.
             </p>
 
-            <h2><code>quotes.txt</code> — Your Daily Log</h2>
+            <h2><code>quotes.txt</code> — Your quotes Log</h2>
             <p>
                 This plain text file is where quotes accumulate.
                 It’s appended to each run, so over time you build a neat archive of inspiration.
