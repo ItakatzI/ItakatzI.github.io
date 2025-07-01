@@ -99,3 +99,4 @@
 # There is no path to Love. Love is the path. - Dan Millman
 # Life is filled with secrets. You can't learn them all at once. - Dan Brown
 # We don't stop playing because we grow old; we grow old because we stop playing. - George Bernard Shaw
+# The fewer the words, the better the prayer. - Martin Luther
