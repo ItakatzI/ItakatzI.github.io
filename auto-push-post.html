@@ -8,145 +8,102 @@
         content="Auto Pusher — Keep Your GitHub Streak Alive. A simple tool to automatically push to your GitHub repository to maintain your contribution streak.">
     <meta name="author" content="Katzir">
     <title>Auto Pusher — Keep Your GitHub Streak Alive</title>
-    <link rel="icon" href="assets/img/A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png" />
-    <link rel="stylesheet" href="assets/css/styles.css">
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
         body {
-            color: #333;
-            background: #f7f7f7;
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
         }
 
-        .blog-post {
-            max-width: 700px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            text-align: left;
+        .gradient-text {
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .blog-post h1 {
-            font-size: 2rem;
-            color: #1a1a1a;
-            margin-bottom: 0.5rem;
-            text-align: center;
+        .card-glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .blog-post h2,
-        .blog-post h3 {
-            margin-top: 2rem;
-            color: #2e7df6;
-            font-weight: 600;
+        .hover-grow {
+            transition: transform 0.3s ease;
         }
 
-        .meta {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 2rem;
+        .hover-grow:hover {
+            transform: translateY(-5px);
         }
 
-        .blog-post p {
-            margin-bottom: 1.25rem;
-        }
-
-        .blog-post pre {
-            background: #f0f0f0;
-            padding: 1rem;
-            border-radius: 4px;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-
-        .blog-post code {
-            background: #f0f0f0;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-family: 'Fira Mono', monospace;
-        }
-
-        .blog-post blockquote {
-            border-left: 4px solid #2e7df6;
-            padding-left: 1rem;
-            color: #555;
-            margin: 1.5rem 0;
-        }
-
-        a {
-            color: #2e7df6;
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        a:hover {
-            border-color: #2e7df6;
-            color: #2e7df6;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            font-weight: 500;
-        }
-
-        header.site-header,
-        footer.site-footer {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        header.site-header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #2e7df6;
-        }
-
-        header.site-header .meta {
-            margin: 0.5rem 0 0;
-            font-size: 0.9rem;
-            color: #777;
-        }
-
-        footer.site-footer {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #888;
-            margin-top: 3rem;
+        pre {
+            font-family: 'Fira Code', monospace;
         }
     </style>
-
 </head>
 
-<body>
-    <div class="nav-placeholder" id="nav-placeholder"></div>
+<body class="min-h-screen">
 
-    <main class="container">
-        <article class="blog-post">
-            <header class="post-header">
-                <h1>Auto Pusher 🖥️➕🚀</h1>
-                <div class="meta">June 29, 2025 • 6 min read</div>
-            </header>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold gradient-text">Katzir</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-slate-300 hover:text-white transition">Home</a>
+                    <a href="blog.html" class="text-white font-semibold transition">Notes</a>
+                    <a href="quotes-page.html" class="text-slate-300 hover:text-white transition">Quotes</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="menu-toggle" class="text-slate-300 hover:text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-md pt-20
+         transform -translate-y-full opacity-0 pointer-events-none
+         transition-all duration-300 ease-in-out">
+        <div class="flex flex-col items-center space-y-8 py-8">
+            <a href="index.html" class="text-slate-300 hover:text-white transition">Home</a>
+            <a href="blog.html" class="text-slate-300 hover:text-white transition">Notes</a>
+            <a href="quotes-page.html" class="text-slate-300 hover:text-white transition">Quotes</a>
+            <button id="close-menu" class="mt-8 px-6 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition">
+                Close Menu
+            </button>
+        </div>
+    </div>
 
-            <h2>The Origin Story</h2>
+    <!-- Post Hero -->
+    <section class="pt-32 pb-6 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto text-center">
+        <h1 class="text-4xl md:text-5xl font-bold gradient-text mb-2">Auto Pusher 🖥️➕🚀</h1>
+        <p class="text-sm text-slate-400">June 29, 2025 • 6 min read • by Katzir</p>
+    </section>
+
+    <!-- Post Content -->
+    <section class="pb-20 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
+        <div class="card-glass rounded-xl p-8 hover-grow space-y-6">
+
+            <h2 class="text-2xl font-semibold">The Origin Story</h2>
             <p>
                 One evening, after realizing my GitHub streak had dropped once again, I decided enough was enough.
                 I needed a tool to handle those daily “keeping-alive” commits automatically—no babysitting, no extra
-                dependencies.
-                Thus, <strong>Auto Pusher</strong> was born: a small suite of scripts that fetch a free ZenQuotes API
-                quote, append it to <code>quotes.txt</code>, and push to GitHub, all scheduled on Windows via
-                PowerShell.
+                dependencies. Thus, <strong>Auto Pusher</strong> was born: a small suite of scripts that fetch a free
+                ZenQuotes API quote, append it to <code>quotes.txt</code>, and push to GitHub, all scheduled on
+                Windows via PowerShell.
             </p>
 
-            <h2>Project Layout</h2>
-            <p>
-                Here’s how I organized the repo:
-            </p>
-            <ul>
+            <h2 class="text-2xl font-semibold">Project Layout</h2>
+            <p>Here’s how I organized the repo:</p>
+            <ul class="list-disc list-inside space-y-2">
                 <li><code>README.md</code> — Overview and instructions</li>
                 <li><code>.env.example</code> — Template for your settings</li>
                 <li><code>auto_commit.sh</code> — The one Bash script that actually does the work</li>
@@ -155,53 +112,51 @@
                 <li><code>quotes.txt</code> — The log file where quotes accumulate</li>
             </ul>
 
-            <h2><code>README.md</code> — Your First Stop</h2>
-            <p>
-                The README is your doorway. It explains:
-            </p>
-            <ul>
+            <h2 class="text-2xl font-semibold"><code>README.md</code> — Your First Stop</h2>
+            <p>The README is your doorway. It explains:</p>
+            <ul class="list-disc list-inside space-y-2">
                 <li>Why Auto Pusher exists</li>
                 <li>Prerequisites: Git Bash, <code>jq</code>, and Windows PowerShell</li>
                 <li>Step-by-step install &amp; scheduling</li>
             </ul>
             <p>Whenever you need a refresher, this is the file to open:</p>
-            <pre><code>https://github.com/ItakatzI/auto-pusher/blob/main/README.md</code></pre>
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>
+https://github.com/ItakatzI/auto-pusher/blob/main/README.md
+      </code></pre>
 
-            <h2><code>.env.example</code> — Secret Sauce</h2>
+            <h2 class="text-2xl font-semibold"><code>.env.example</code> — Secret Sauce</h2>
             <p>
-                To avoid hard-coding credentials and file names, I use an environment file.
-                Copy it to <code>.env</code> and fill in your values:
+                To avoid hard-coding credentials and file names, I use an environment file. Copy it to
+                <code>.env</code> and fill in your values:
             </p>
-            <pre><code># .env.example
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>
+# .env.example
 REPO_DIR=/c/path/to/your/repo-to-commit
 REPO_ALT=/c/path/to/your/another-repo-to-commit
 REPO_DIR2=C:\Users\path\to\auto-push\folder\quotesForGit
 TARGET_FILE=quotes.txt
-</code></pre>
-            <p>
-                This file is <strong>ignored</strong> by Git, so your personal tokens or emails never leak.
-            </p>
+      </code></pre>
+            <p>This file is <strong>ignored</strong> by Git, so your personal tokens or emails never leak.</p>
 
-            <h2><code>auto_commit.sh</code> — The Heart in Bash</h2>
+            <h2 class="text-2xl font-semibold"><code>auto_commit.sh</code> — The Heart in Bash</h2>
             <p>
                 Although this project lives on Windows, I wrote the core in Bash to keep it lightweight and
-                dependency-free. Its meant to be used on two repositories, alternating between them to contribute to two GitHub repositories.:
+                dependency-free. It's meant to be used on two repositories, alternating between them to
+                contribute to two GitHub repos:
             </p>
-            <pre><code>#!/usr/bin/env bash
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>
+#!/usr/bin/env bash
 
 # === Config ===
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_PATH="$SCRIPT_DIR/.env"
 LOG_PATH="$SCRIPT_DIR/push_log.txt"
-# state file to remember which repo was used last time
 LAST_REPO_FILE="$SCRIPT_DIR/.last_repo"
 
-# Log to both file and terminal
 exec > >(tee -a "$LOG_PATH") 2>&1
-
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting auto_commit.sh"
 
-# === Load .env ===
+# Load .env
 if [ -f "$ENV_PATH" ]; then
   export $(grep -v '^#' "$ENV_PATH" | xargs)
 else
@@ -209,17 +164,16 @@ else
   exit 1
 fi
 
-# === Sanity Check ===
+# Validate
 if [ -z "$REPO_DIR" ] || [ -z "$REPO_ALT" ] || [ -z "$TARGET_FILE" ]; then
   echo "[✘] Missing REPO_DIR, REPO_ALT or TARGET_FILE in .env"
   exit 1
 fi
 
-# === Choose which repo to use this run ===
+# Choose repo
 if [ -f "$LAST_REPO_FILE" ]; then
-  LAST=$(cat "$LAST_REPO_FILE")
+  LAST=$(<"$LAST_REPO_FILE")
 else
-  # default so that first run uses REPO_DIR
   LAST="ALT"
 fi
 
@@ -232,260 +186,238 @@ else
 fi
 
 echo "[✔] Using repo: $REPO"
-
-cd "$REPO" || {
-  echo "[✘] Failed to cd into $REPO"
-  exit 1
-}
+cd "$REPO" || { echo "[✘] Failed to cd into $REPO"; exit 1; }
 git pull
-# === Commit settings ===
+
 MIN_COMMITS=${MIN_COMMITS:-1}
 MAX_COMMITS=2
 NUM_COMMITS=$((RANDOM % (MAX_COMMITS - MIN_COMMITS + 1) + MIN_COMMITS))
-
 echo "[✔] Planning $NUM_COMMITS motivational commits..."
 
-for ((i = 0; i < NUM_COMMITS; i++)); do
-  echo "[→] Commit $((i + 1)) of $NUM_COMMITS"
-
-  # Fetch a quote
+for ((i=0; i<NUM_COMMITS; i++)); do
+  echo "[→] Commit $((i+1)) of $NUM_COMMITS"
   RESPONSE=$(curl -s https://zenquotes.io/api/random)
-  if [ -z "$RESPONSE" ]; then
-    echo "[!] Failed to fetch quote, skipping..."
-    continue
-  fi
-
-  # Extract and sanitize quote
-  RAW_QUOTE=$(echo "$RESPONSE" | sed -n 's/.*"q":"\([^"]*\)".*/\1/p')
-  RAW_AUTHOR=$(echo "$RESPONSE" | sed -n 's/.*"a":"\([^"]*\)".*/\1/p')
-  if [ -z "$RAW_QUOTE" ] || [ -z "$RAW_AUTHOR" ]; then
-    echo "[!] Invalid quote structure, skipping..."
-    continue
-  fi
-
-  CLEAN_QUOTE=$(echo "$RAW_QUOTE — $RAW_AUTHOR" | iconv -f utf-8 -t ascii//TRANSLIT | tr -cd '\11\12\15\40-\176')
-
-  # Append and commit
-  git checkout -b "NewDailyQuote"
-  printf "# %s\n" "$CLEAN_QUOTE" >>"$TARGET_FILE"
+  RAW_Q=$(echo "$RESPONSE" | sed -n 's/.*"q":"\([^"]*\)".*/\1/p')
+  RAW_A=$(echo "$RESPONSE" | sed -n 's/.*"a":"\([^"]*\)".*/\1/p')
+  LINE="$RAW_Q — $RAW_A"
+  git checkout -b daily-quote
+  echo "# $LINE" >> "$TARGET_FILE"
   git add "$TARGET_FILE"
-  git commit -m "Motivation: \"$CLEAN_QUOTE\" ($(date '+%Y-%m-%d %H:%M:%S'))"
+  git commit -m "Motivation: \"$LINE\""
   git checkout main
-  git merge NewDailyQuote
-  git branch -d NewDailyQuote
+  git merge daily-quote
+  git branch -d daily-quote
   git push
-
-  echo "[💬] $CLEAN_QUOTE"
-
-  # Windows notification (requires BurntToast module)
-  ESCAPED_QUOTE=$(echo "$CLEAN_QUOTE" | sed "s/'/''/g")
-
-  powershell.exe -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms') | Out-Null; [System.Windows.Forms.MessageBox]::Show('$ESCAPED_QUOTE','Motivation')"
-
 done
 
 echo "[✔] Completed $NUM_COMMITS commits."
+git push origin HEAD:main
+      </code></pre>
 
-# Push straight to main
-git push origin HEAD:main</code></pre>
+            <h2 class="text-2xl font-semibold"><code>setup.ps1</code> — One-Click Setup</h2>
             <p>
-                This script does the heavy lifting:
-                It fetches a random quote from ZenQuotes, appends it to <code>quotes.txt</code>, and commits it.
-                It alternates between two repositories to keep your contributions diverse.
-                It also handles basic error checking and logging.
+                Rather than manually running the script, I automated it and registered the daily scheduler task:
             </p>
-            <h2><code>setup.ps1</code> — One-Click Setup</h2>
-            <p>
-                Rather than manually running the script, I automated it, now its installs, <code>schedule_tasks.ps1</code>, a daily scheduler task that runs the script every day at 11:00 AM, this task will create new tasks to randomly push commits to the GitHub repositories.
-            </p>
-            <pre><code>
-                # setup.ps1
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>
+# setup.ps1
 
-# --- Load .env file ---
 function Load-EnvFile {
-    $envPath = Join-Path $PSScriptRoot ".env"
-    if (Test-Path $envPath) {
-        Get-Content $envPath | ForEach-Object {
-            if ($_ -match '^\s*([^#][^=]*)\s*=\s*(.*)\s*$') {
-                [System.Environment]::SetEnvironmentVariable($matches[1].Trim(), $matches[2].Trim())
-            }
-        }
-    } else {
-        Write-Error "[✘] .env file not found at $envPath"
-        exit 1
+  $envPath = Join-Path $PSScriptRoot ".env"
+  if (Test-Path $envPath) {
+    Get-Content $envPath | ForEach-Object {
+      if ($_ -match '^\s*([^#][^=]*)\s*=\s*(.*)\s*$') {
+        [Environment]::SetEnvironmentVariable($matches[1], $matches[2])
+      }
     }
+  } else {
+    Write-Error "[✘] .env file not found"
+    exit 1
+  }
 }
 
 Load-EnvFile
+$proj = $env:REPO_DIR2
+$sched = Join-Path $proj "schedule_tasks.ps1"
+$bash  = Join-Path $proj "auto_commit.sh"
 
-# --- Get paths from .env ---
-$projectPath = $env:REPO_DIR2
-if (-not $projectPath) {
-    Write-Error "[X] REPO_DIR2 not defined in .env"
-    exit 1
+powershell.exe -ExecutionPolicy Bypass -File "`"$sched`""
+
+$trig   = New-ScheduledTaskTrigger -Daily -At 11:00am
+$action = New-ScheduledTaskAction -Execute "powershell.exe" `
+          -Argument "-File `"$sched`""
+Register-ScheduledTask -Action $action -Trigger $trig `
+                      -TaskName "AutoPusherScheduler" -Force
+      </code></pre>
+
+            <h2 class="text-2xl font-semibold"><code>schedule_tasks.ps1</code> — Wake Up and Go</h2>
+            <p>This script cleans up old tasks and schedules a few random pushes each day:</p>
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>
+# schedule_tasks.ps1
+
+Add-Content -Path "$env:TEMP\push_scheduler_log.txt" `
+  -Value "[$(Get-Date)] scheduling run"
+
+Get-Content "$PSScriptRoot\.env" | ForEach-Object {
+  if ($_ -match '^(.*?)=(.*)$') {
+    [Environment]::SetEnvironmentVariable($matches[1], $matches[2])
+  }
 }
 
-$scheduleScript = Join-Path $projectPath "schedule_tasks.ps1"
-$bashScript = Join-Path $projectPath "auto_commit.sh"
-
-if (-not (Test-Path $scheduleScript)) {
-    Write-Error "[X] schedule_tasks.ps1 not found at $scheduleScript"
-    exit 1
-}
-
-if (-not (Test-Path $bashScript)) {
-    Write-Error "[X] auto_commit.sh not found at $bashScript"
-    exit 1
-}
-
-# --- Inform user ---
-Write-Host "[V] Loaded environment variables from .env"
-Write-Host "  > Project path: $projectPath"
-Write-Host "  > Bash script:  $bashScript"
-Write-Host ""
-
-# --- Run today's schedule creation ---
-Write-Host "[→] Running schedule_tasks.ps1 to create today’s random push tasks..."
-powershell.exe -ExecutionPolicy Bypass -File "`"$scheduleScript`""
-
-# --- Schedule the daily randomization task ---
-Write-Host "[→] Scheduling 'WhitespacePushDailyScheduler' at 11:00 AM..."
-
-$dailyTrigger = New-ScheduledTaskTrigger -Daily -At 11:00am
-$dailyAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `"$scheduleScript`""
-
-Register-ScheduledTask -Action $dailyAction -Trigger $dailyTrigger -TaskName "WhitespacePushDailyScheduler" -Description "Daily re-randomization of motivational commit tasks" -Force
-
-Write-Host "[V] Scheduled task 'WhitespacePushDailyScheduler' successfully"
-
-            </code></pre>
-            <p>
-                <p>
-                    Run this once after cloning to get your environment ready. It sets up the necessary paths and registers the daily task.
-                </p>
-            </p>
-
-            <h2><code>schedule_tasks.ps1</code> — Wake Up and Go</h2>
-            <p>
-                Finally, <code>schedule_tasks.ps1</code> schedules <code>auto_commit.sh</code> daily in randomize amount and time.:
-            </p>
-            <pre><code># === schedule_tasks.ps1 ===
-
-# --- Log execution ---
-Add-Content -Path "$env:USERPROFILE\push_scheduler_log.txt" -Value "[$(Get-Date)] schedule_tasks.ps1 executed"
-
-# --- Load .env ---
-$envPath = "$PSScriptRoot\.env"
-if (!(Test-Path $envPath)) {
-    Write-Error ".env file not found at $envPath"
-    exit 1
-}
-
-Get-Content $envPath | ForEach-Object {
-    if ($_ -match '^\s*([^#][^=]+?)\s*=\s*(.+)$') {
-        [System.Environment]::SetEnvironmentVariable($matches[1].Trim(), $matches[2].Trim())
-    }
-}
-
-# --- Validate REPO_DIR ---
-$repoDir = $env:REPO_DIR2
-if (-not $repoDir) {
-    Write-Error "REPO_DIR not defined in .env"
-    exit 1
-}
-# Convert /c/... style to Windows path if needed
-$windowsRepoDir = $repoDir 
-# Path to script
-$scriptPath = Join-Path $windowsRepoDir "auto_commit.sh"
-if (-not (Test-Path $scriptPath)) {
-    Write-Error "auto_commit.sh not found at $scriptPath"
-    exit 1
-}
-
-
-
-
-# --- Git Bash path ---
+$repoDir  = $env:REPO_DIR2
 $bashPath = "C:\Program Files\Git\bin\bash.exe"
-if (-not (Test-Path $bashPath)) {
-    Write-Error "Git Bash not found at $bashPath"
-    exit 1
+
+Get-ScheduledTask -TaskName "AutoPusher_*" |
+  Unregister-ScheduledTask -Confirm:$false
+
+$num = Get-Random -Minimum 1 -Maximum 4
+for ($i=0; $i -lt $num; $i++) {
+  $h = Get-Random -Minimum 20 -Maximum 22
+  $m = Get-Random -Minimum 0  -Maximum 59
+  $t = "{0:00}:{1:00}" -f $h,$m
+  $arg = "-c `"cd '$repoDir' && bash ./auto_commit.sh`""
+  New-ScheduledTaskAction -Execute $bashPath -Argument $arg |
+    Register-ScheduledTask -Trigger (New-ScheduledTaskTrigger -Daily -At $t) `
+      -TaskName "AutoPusher_$i" -Force
 }
+      </code></pre>
 
-
-
-# --- Cleanup old tasks ---
-Get-ScheduledTask | Where-Object { $_.TaskName -like "WhitespacePush_*" } | Unregister-ScheduledTask -Confirm:$false
-
-
-
-$logFile = "$env:USERPROFILE\auto_commit_output.log"
-
-# --- Schedule new tasks ---
-$numTasks = Get-Random -Minimum 0 -Maximum 3
-$logFile = "$env:TEMP\push_log.txt"
-
-for ($i = 0; $i -lt $numTasks; $i++) {
-    $hour = Get-Random -Minimum 11 -Maximum 17
-    $minute = Get-Random -Minimum 0 -Maximum 59
-    $time = "{0:D2}:{1:D2}" -f $hour, $minute
-    $taskName = "WhitespacePush_$i"
-
-    # Properly escaped Bash command
-    $bashCommand = "-c `"cd '$repoDir' && bash ./auto_commit.sh | tee -a '$logFile'`""
-
-    $action = New-ScheduledTaskAction -Execute $bashPath -Argument $bashCommand
-    $trigger = New-ScheduledTaskTrigger -Daily -At $time
-
-    Register-ScheduledTask -Action $action -Trigger $trigger -TaskName $taskName -Description "Random motivational push" -Force
-
-    Write-Output "[V] Task $taskName scheduled at $time"
-}
-
-Write-Output "[V] $numTasks task(s) scheduled. Logs go to $logFile"
-</code></pre>
+            <h2 class="text-2xl font-semibold">quotes.txt — Your Quotes Log</h2>
             <p>
-                Now, every day you’ll have  fresh commits —and a new quotes in your GitHub repo.
+                This plain text file accumulates inspirational quotes over time, building your personal archive.
             </p>
 
-            <h2><code>quotes.txt</code> — Your quotes Log</h2>
-            <p>
-                This plain text file is where quotes accumulate.
-                It’s appended to each run, so over time you build a neat archive of inspiration.
-            </p>
-
-            <h2>Lessons Learned &amp; Pitfalls</h2>
-            <ul>
-                <li><strong>Windows Path quirks:</strong> Make sure Git Bash is in your PATH, or the scheduled job will
-                    silently fail.</li>
-                <li><strong>ZenQuotes limits:</strong> Free tier has a rate limit—if you hammer the API, you’ll get
-                    empty responses. Caching or backoff helps.</li>
-                <li><strong>Merge collisions:</strong> Avoid editing <code>quotes.txt</code> manually. The script always
-                    commits straight to <code>main</code> to sidestep conflicts.</li>
-                <li><strong>Scheduler timing:</strong> If your PC is off at 8 pm, Task Scheduler won’t run. Consider the
-                    “Start the task as soon as possible after a scheduled start is missed” option.</li>
+            <h2 class="text-2xl font-semibold">Lessons Learned &amp; Pitfalls</h2>
+            <ul class="list-disc list-inside space-y-2">
+                <li><strong>Windows Path quirks:</strong> Ensure <code>bash.exe</code> is in your PATH or tasks will
+                    fail.</li>
+                <li><strong>ZenQuotes limits:</strong> Free tier rate limits can return empty results—implement retry or
+                    cache.</li>
+                <li><strong>Merge collisions:</strong> Avoid manual edits to <code>quotes.txt</code>; script merges
+                    directly on <code>main</code>.</li>
+                <li><strong>Scheduler timing:</strong> If your PC is off, Task Scheduler skips—enable “Run if missed.”
+                </li>
             </ul>
 
-            <h2>Get the Code</h2>
+            <h2 class="text-2xl font-semibold">Get the Code</h2>
             <p>
                 Dive in and try it yourself:
-                <a href="https://github.com/ItakatzI/auto-pusher" target="_blank" rel="noopener">
+                <a href="https://github.com/ItakatzI/auto-pusher" class="text-blue-400 hover:underline">
                     github.com/ItakatzI/auto-pusher
                 </a>
             </p>
-            <div class="back-link">
-                <a href="Blog.html">← Back to all posts</a>
-            </div>
-        </article>
 
-    </main>
-    <footer class="site-footer">
-        <div class="container">
-            <p>© 2025 Katzir. All rights reserved.</p>
+            <a href="blog.html" class="inline-block mt-8 text-blue-400 hover:underline">
+                ← Back to all posts
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Let's Conjure Something Epic</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto"></div>
+            <p class="text-xl text-slate-400 mt-6 max-w-2xl mx-auto">
+                I'm always on the lookout for new quests—collaborate, chat, or challenge me to build the next VR dragon
+                simulator!
+            </p>
+        </div>
+
+        <div class="max-w-2xl mx-auto">
+            <div class="card-glass rounded-2xl p-8 hover-grow">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <a href="mailto:tai@ikatzir.com"
+                        class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+                        <i class="fas fa-envelope text-blue-400 text-2xl mb-2"></i>
+                        <span class="text-slate-300">Email</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank"
+                        class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+                        <i class="fab fa-linkedin-in text-blue-400 text-2xl mb-2"></i>
+                        <span class="text-slate-300">LinkedIn</span>
+                    </a>
+                    <a href="https://github.com/ItakatzI" target="_blank"
+                        class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+                        <i class="fab fa-github text-blue-400 text-2xl mb-2"></i>
+                        <span class="text-slate-300">GitHub</span>
+                    </a>
+                    <a href="https://ikatzir.com/quotes-page.html" target="_blank"
+                        class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+                        <i class="fas fa-quote-right text-blue-400 text-2xl mb-2"></i>
+                        <span class="text-slate-300">Quotes</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+                <p class="text-xl font-bold gradient-text center">Katzir</p>
+                <p class="text-slate-500 mt-2">Product & Project Wizard</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="mailto:tai@ikatzir.com" class="text-slate-400 hover:text-white transition">
+                    <i class="fas fa-envelope text-xl"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank"
+                    class="text-slate-400 hover:text-white transition">
+                    <i class="fab fa-linkedin-in text-xl"></i>
+                </a>
+                <a href="https://github.com/ItakatzI" target="_blank"
+                    class="text-slate-400 hover:text-white transition">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+        <div class="mt-8 text-center text-slate-500 text-sm">
+            &copy; <span id="year"></span> Katzir. All spells reserved.
         </div>
     </footer>
 
-    <script src="scripts/include-nav.js"></script>
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeMenu = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function showMobile() {
+            mobileMenu.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+            mobileMenu.classList.add('translate-y-0', 'opacity-100');
+        }
+        function hideMobile() {
+            mobileMenu.classList.remove('translate-y-0', 'opacity-100');
+            mobileMenu.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+        }
+
+        // Tapping the ☰ button now toggles open/closed
+        menuToggle.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('-translate-y-full')) {
+                showMobile();
+            } else {
+                hideMobile();
+            }
+        });
+
+        // Close button and links still work
+        closeMenu.addEventListener('click', hideMobile);
+        document.querySelectorAll('#mobile-menu a').forEach(a =>
+            a.addEventListener('click', hideMobile)
+        );
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor =>
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            })
+        );
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>

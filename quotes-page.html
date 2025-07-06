@@ -4,37 +4,172 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="assets/img/A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png"
-    sizes="64x64">
-  <title>Latest Quote</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <title>Latest Quote • Katzir</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .card-glass {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .back-button {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      padding: .5rem 1rem;
+      background-color: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: .5rem;
+      color: #38bdf8;
+      font-weight: 500;
+      transition: background .3s, transform .3s;
+    }
+
+    .back-button:hover {
+      background-color: rgba(56, 189, 248, 0.2);
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 
-<body>
-  <div class="container">
-    <div class="quote-item" id="latest-quote">Loading...</div>
-    <button class="back-button" onclick="history.back()">← Back</button>
+<body class="min-h-screen">
+
+  <!-- Navigation -->
+  <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="index.html" class="text-xl font-bold gradient-text">Katzir</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-slate-300 hover:text-white">Home</a>
+          <a href="blog.html" class="text-slate-300 hover:text-white">Notes</a>
+          <a href="quotes-page.html" class="text-slate-300 hover:text-white">Quotes</a>
+        </div>
+        <div class="md:hidden flex items-center">
+          <button id="menu-toggle" class="text-slate-300 hover:text-white">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-md pt-20
+         transform -translate-y-full opacity-0 pointer-events-none
+         transition-all duration-300 ease-in-out">
+    <div class="flex flex-col items-center space-y-8 py-8">
+      <a href="index.html" class="text-slate-300 hover:text-white transition">Home</a>
+      <a href="blog.html" class="text-slate-300 hover:text-white transition">Notes</a>
+      <a href="quotes-page.html" class="text-slate-300 hover:text-white transition">Quotes</a>
+      <button id="close-menu" class="mt-8 px-6 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition">
+        Close Menu
+      </button>
+    </div>
   </div>
 
+  <!-- Page Title -->
+  <section class="pt-32 pb-8 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto text-center">
+    <h1 class="text-4xl md:text-5xl font-bold gradient-text">Latest Quote</h1>
+  </section>
+
+  <!-- Quote Card -->
+  <section class="px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
+    <div id="latest-quote" class="card-glass p-8 text-lg text-slate-100 rounded-xl shadow-lg">
+      Loading…
+    </div>
+    <div class="text-center">
+      <button class="back-button" onclick="history.back()">
+        <i class="fas fa-arrow-left mr-2"></i> Back
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-6 md:mb-0">
+        <p class="text-xl font-bold gradient-text center">Katzir</p>
+        <p class="text-slate-500 mt-2">Product & Project Wizard</p>
+      </div>
+      <div class="flex space-x-6">
+        <a href="mailto:tai@ikatzir.com" class="text-slate-400 hover:text-white transition">
+          <i class="fas fa-envelope text-xl"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank"
+          class="text-slate-400 hover:text-white transition">
+          <i class="fab fa-linkedin-in text-xl"></i>
+        </a>
+        <a href="https://github.com/ItakatzI" target="_blank" class="text-slate-400 hover:text-white transition">
+          <i class="fab fa-github text-xl"></i>
+        </a>
+      </div>
+    </div>
+    <div class="mt-8 text-center text-slate-500 text-sm">
+      &copy; <span id="year"></span> Katzir. All spells reserved.
+    </div>
+  </footer>
+
   <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const closeMenu = document.getElementById('close-menu');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    function showMobile() {
+      mobileMenu.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+      mobileMenu.classList.add('translate-y-0', 'opacity-100');
+    }
+    function hideMobile() {
+      mobileMenu.classList.remove('translate-y-0', 'opacity-100');
+      mobileMenu.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+    }
+
+    // Tapping the ☰ button now toggles open/closed
+    menuToggle.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('-translate-y-full')) {
+        showMobile();
+      } else {
+        hideMobile();
+      }
+    });
+
+    // Close button and links still work
+    closeMenu.addEventListener('click', hideMobile);
+    document.querySelectorAll('#mobile-menu a').forEach(a =>
+      a.addEventListener('click', hideMobile)
+    );
+
+    // Load latest quote
     document.addEventListener('DOMContentLoaded', () => {
       fetch('quotes.txt')
         .then(res => res.text())
         .then(text => {
-          const lines = text
-            .split(/\r?\n/)
-            .map(l => l.trim())
-            .filter(l => l);
-          const latest = lines.length
-            ? lines[lines.length - 1]
-            : 'No quotes found.';
-          document.getElementById('latest-quote').textContent = latest;
+          const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+          document.getElementById('latest-quote').textContent =
+            lines.length ? lines[lines.length - 1] : 'No quotes found.';
         })
-        .catch(err => {
+        .catch(_ => {
           document.getElementById('latest-quote').textContent = 'Failed to load quote.';
-          console.error(err);
         });
+      document.getElementById('year').textContent = new Date().getFullYear();
     });
   </script>
 </body>

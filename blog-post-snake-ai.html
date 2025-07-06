@@ -8,151 +8,123 @@
         content="How I built a Snake AI showdown with 7 different AI strategies in pure JavaScript. A fun exploration of game AI concepts!">
     <meta name="author" content="Katzir">
     <title>How I Built a Snake AI Showdown</title>
-    <link rel="icon" href="assets/img/A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png" />
-    <link rel="stylesheet" href="assets/css/styles.css">
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
         body {
-            color: #333;
-            background: #f7f7f7;
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
         }
 
-        .blog-post {
-            max-width: 700px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            text-align: left;
+        .gradient-text {
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .blog-post h1 {
-            font-size: 2rem;
-            color: #1a1a1a;
-            margin-bottom: 0.5rem;
-            text-align: center;
+        .card-glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .blog-post h2,
-        .blog-post h3 {
-            margin-top: 2rem;
-            color: #2e7df6;
-            font-weight: 600;
+        .hover-grow {
+            transition: transform .3s ease;
         }
 
-        .meta {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 2rem;
+        .hover-grow:hover {
+            transform: translateY(-5px);
         }
 
-        .blog-post p {
-            margin-bottom: 1.25rem;
+        pre,
+        code {
+            font-family: 'Fira Code', monospace;
         }
 
-        .blog-post pre {
-            background: #f0f0f0;
-            padding: 1rem;
-            border-radius: 4px;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-
-        .blog-post code {
-            background: #f0f0f0;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-family: 'Fira Mono', monospace;
-        }
-
-        .blog-post blockquote {
-            border-left: 4px solid #2e7df6;
+        blockquote {
+            border-left: 4px solid #38bdf8;
             padding-left: 1rem;
-            color: #555;
-            margin: 1.5rem 0;
-        }
-
-        a {
-            color: #2e7df6;
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        a:hover {
-            border-color: #2e7df6;
-            color: #2e7df6;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            font-weight: 500;
-        }
-
-        header.site-header,
-        footer.site-footer {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        header.site-header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #2e7df6;
-        }
-
-        header.site-header .meta {
-            margin: 0.5rem 0 0;
-            font-size: 0.9rem;
-            color: #777;
-        }
-
-        footer.site-footer {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #888;
-            margin-top: 3rem;
+            color: #bbb;
         }
     </style>
-
 </head>
 
-<body>
-    <div class="nav-placeholder" id="nav-placeholder"></div>
+<body class="min-h-screen">
 
-    <main class="container">
-        <article class="blog-post">
-            <header>
-                <h1>🐍 How I Built a Snake AI Showdown (And Accidentally Learned Game AI)</h1>
-                <p class="meta">By Katzir • June 22, 2025</p>
-            </header>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold gradient-text">Itai Katzir</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-slate-300 hover:text-white transition">Home</a>
+                    <a href="blog.html" class="text-slate-300 hover:text-white transition">Notes</a>
+                    <a href="quotes-page.html" class="text-slate-300 hover:text-white transition">Quotes</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="menu-toggle" class="text-slate-300 hover:text-white"><i
+                            class="fas fa-bars text-xl"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-md pt-20
+         transform -translate-y-full opacity-0 pointer-events-none
+         transition-all duration-300 ease-in-out">
+        <div class="flex flex-col items-center space-y-8 py-8">
+            <a href="index.html" class="text-slate-300 hover:text-white transition">Home</a>
+            <a href="blog.html" class="text-slate-300 hover:text-white transition">Notes</a>
+            <a href="quotes-page.html" class="text-slate-300 hover:text-white transition">Quotes</a>
+            <button id="close-menu" class="mt-8 px-6 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition">
+                Close Menu
+            </button>
+        </div>
+    </div>
 
-            <p>Hey there! If you’re a PM like me—fascinated by game AI but intimidated by all the math-y jargon—this is
+    <!-- Post Hero -->
+    <section class="pt-32 pb-6 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto text-center">
+        <h1 class="text-4xl md:text-5xl font-bold gradient-text mb-2">🐍 How I Built a Snake AI Showdown</h1>
+        <p class="text-sm text-slate-400">By Katzir • June 22, 2025</p>
+    </section>
+
+    <!-- Post Content -->
+    <section class="pb-20 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
+        <div class="card-glass rounded-xl p-8 hover-grow space-y-6">
+
+            <p>
+                Hey there! If you’re a PM like me—fascinated by game AI but intimidated by all the math-y jargon—this is
                 for you. A few weekends ago I thought, “What if I built a Snake game that plays itself?” Seven snakes,
-                each with its own brain:
-                <strong>1. Random</strong>, <strong>2. Greedy</strong>, <strong>3. Tail-Aware</strong>, <strong>4.
-                    Loop-Safe</strong>, <strong>5. Lookahead</strong>, <strong>6. Expectimax</strong>, and <strong>7.
-                    MCTS</strong>.
-                The result? The most fun I’ve ever had with vanilla JavaScript.
+                each with its own brain: <strong>Random</strong>, <strong>Greedy</strong>, <strong>Tail-Aware</strong>,
+                <strong>Loop-Safe</strong>, <strong>Lookahead</strong>, <strong>Expectimax</strong>, and
+                <strong>MCTS</strong>. The result? The most fun I’ve ever had with vanilla JavaScript.
             </p>
-            <p>This post is half tutorial, half war story. We’ll explore how each AI works—<strong>why</strong> it makes
+            <p>
+                This post is half tutorial, half war story. We’ll explore how each AI works—<strong>why</strong> it
+                makes
                 its moves, not just <em>what</em> it does—and I’ll sprinkle in debugging anecdotes so you can laugh (or
-                cry) along. Ready?</p>
-            <P><a href="http://ikatzir.com/SnakeAI" target="_blank">Try the live demo first →</a></P>
-            <p><a href="https://github.com/ItakatzI/SnakeAI" target="_blank">Check it out on GitHub →</a></p>
+                cry) along. Ready?
+            </p>
+            <p class="text-center">
+                <a href="http://ikatzir.com/SnakeAI" target="_blank" class="text-blue-400 hover:underline">Try the live
+                    demo first →</a><br>
+                <a href="https://github.com/ItakatzI/SnakeAI" target="_blank"
+                    class="text-blue-400 hover:underline">Check it out on GitHub →</a>
+            </p>
 
-            <h2>🤖 Demystifying Game AI</h2>
+            <h2 class="text-2xl font-semibold">🤖 Demystifying Game AI</h2>
             <p>Game AI isn’t magic—it’s code that answers one question:</p>
             <blockquote>“Where should the snake move next?”</blockquote>
             <p>Each brain implements a different decision rule, from chaos to clever planning.</p>
 
-            <h2>🎮 Seven AIs, One Arena</h2>
-            <ul>
+            <h2 class="text-2xl font-semibold">🎮 Seven AIs, One Arena</h2>
+            <ul class="list-disc list-inside space-y-2">
                 <li>🟥 <strong>Random AI</strong> — zero planning, pure chaos</li>
                 <li>🟧 <strong>Greedy AI</strong> — A* to apple, ignores safety</li>
                 <li>🟨 <strong>Tail-Aware AI</strong> — checks survival after apple</li>
@@ -163,8 +135,8 @@
             </ul>
             <p>All in pure HTML/CSS/JS—no frameworks required.</p>
 
-            <h2>📦 Project Structure</h2>
-            <pre><code>snake-ai-showdown/
+            <h2 class="text-2xl font-semibold">📦 Project Structure</h2>
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>snake-ai-showdown/
 ├── index.html
 ├── game.html
 ├── style.css
@@ -173,29 +145,29 @@
 </code></pre>
             <p>Each AI gets its own &lt;canvas&gt; and a fresh copy of the Snake logic.</p>
 
-            <h2>🧠 AI Deep Dive: Theory & Code</h2>
+            <h2 class="text-2xl font-semibold">🧠 AI Deep Dive: Theory & Code</h2>
 
-            <h3>1. 🟥 Random AI</h3>
+            <h3 class="text-xl font-semibold">1. 🟥 Random AI</h3>
             <p><strong>Theory:</strong> No planning. Every tick, pick one of the legal neighbors at random.</p>
-            <pre><code>function chooseRandom() {
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>function chooseRandom() {
   const moves = getValidMoves(head);
   return moves[Math.floor(Math.random() * moves.length)];
 }</code></pre>
             <p><em>Anecdote:</em> It often dies on the very first move—hilarity ensues.</p>
 
-            <h3>2. 🟧 Greedy AI (A*)</h3>
+            <h3 class="text-xl font-semibold">2. 🟧 Greedy AI (A*)</h3>
             <p><strong>Theory:</strong> A* searches for the shortest grid path to the apple using
                 <code>f(n)=g(n)+h(n)</code>, with Manhattan <code>h</code>.
             </p>
-            <pre><code>function chooseGreedy() {
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>function chooseGreedy() {
   const path = aStar(head, apple);
   return path ? path[1] : null;
 }</code></pre>
             <p>Fast—but blind; it often crashes into its own tail.</p>
 
-            <h3>3. 🟨 Tail-Aware AI</h3>
+            <h3 class="text-xl font-semibold">3. 🟨 Tail-Aware AI</h3>
             <p><strong>Theory:</strong> “If I take that apple, can I still reach my tail afterward?”</p>
-            <pre><code>function chooseTailAware() {
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>function chooseTailAware() {
   const pA = aStar(head, apple);
   if (pA && isPathSafe(pA)) return pA[1];
   const pT = aStar(head, tail);
@@ -204,31 +176,27 @@
             <p><strong>isPathSafe(path)</strong> simulates growing along <code>path</code> then checks head→tail
                 reachability.</p>
 
-            <h3>4. 🟩 Loop-Safe AI</h3>
+            <h3 class="text-xl font-semibold">4. 🟩 Loop-Safe AI</h3>
             <p><strong>Theory:</strong> Tail-Aware plus loop detection & auto-restart:</p>
-            <ol>
+            <ol class="list-decimal list-inside space-y-1">
                 <li>Try apple if safe</li>
                 <li>Else chase tail</li>
                 <li>Else random</li>
-                <li>If stuck (200 ticks + &lt;10 unique heads), <code>restart()</code></li>
+                <li>If stuck (&gt;200 ticks & &lt;10 unique heads), <code>restart()</code></li>
             </ol>
-            <pre><code>function chooseLoopSafe() {
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>function chooseLoopSafe() {
   if (isSafe(pathToApple)) return pathToApple[1];
   if (pathToTail) return pathToTail[1];
   if (isStuckInLoop()) { restart(); return; }
   return chooseRandom();
 }</code></pre>
 
-            <h3>5. 🔵 Lookahead AI</h3>
-            <p><strong>Theory:</strong> Minimax to depth 3. Simulate your own moves, score each future state by</p>
-            <ul>
-                <li>Distance to apple (closer = better)</li>
-                <li>Available free space (more = safer)</li>
-                <li>Snake length (longer = better)</li>
-            </ul>
-            <pre><code>function chooseLookahead(depth=3) {
+            <h3 class="text-xl font-semibold">5. 🔵 Lookahead AI</h3>
+            <p><strong>Theory:</strong> Minimax to depth 3. Simulate moves, score each state by distance, free space,
+                length.</p>
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>function chooseLookahead(depth=3) {
   let best, bestScore = -Infinity;
-  for (let mv of getNeighbors(head)) {
+  for (let mv of getValidMoves(head)) {
     const state = simulateState(snake, apple, mv);
     const score = minimax(state, depth-1);
     if (score > bestScore) { bestScore = score; best = mv; }
@@ -236,49 +204,36 @@
   return best;
 }</code></pre>
 
-            <h3>6. 🟣 Expectimax AI</h3>
-            <p><strong>Theory:</strong> Like lookahead, but treat the apple‐spawn as a “chance” node—average over N
-                random spawns.</p>
-            <pre><code>function chooseExpectimax(depth=2) {
-  // maximize over your moves, then average over random apple positions
+            <h3 class="text-xl font-semibold">6. 🟣 Expectimax AI</h3>
+            <p><strong>Theory:</strong> Like lookahead, but treat apple‐spawn as a chance node—average over spawns.</p>
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>function chooseExpectimax(depth=2) {
+  // maximize over moves, then average over random apple positions
 }</code></pre>
 
-            <h3>7. ⚫ MCTS AI</h3>
-            <p><strong>Theory:</strong> For each next move, run 15 short random playouts (max 30 steps) on a cloned
-                state,
-                pick the move with highest average survival length.</p>
-            <pre><code>function chooseMCTS(sims=15, maxSteps=30) {
-  // for each move: sum(simulateRandomPlay(simState, maxSteps)); return argmax;
+            <h3 class="text-xl font-semibold">7. ⚫ MCTS AI</h3>
+            <p><strong>Theory:</strong> For each move, run 15 random rollouts (max 30 steps), pick highest average
+                survival.</p>
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>function chooseMCTS(sims=15, maxSteps=30) {
+  // for each move: simulateRandomPlay, return argmax
 }</code></pre>
 
-            <h2>🔧 Key Functions Explained</h2>
+            <h2 class="text-2xl font-semibold">🔧 Key Functions Explained</h2>
+            <ul class="list-disc list-inside space-y-2">
+                <li><code>getValidMoves(head)</code> — adjacent cells not blocked</li>
+                <li><code>aStar(start, goal)</code> — A* with Manhattan heuristic</li>
+                <li><code>isPathSafe(path)</code> — grow then BFS head→tail</li>
+                <li><code>isStuckInLoop()</code> — checks last 200 heads for loops</li>
+                <li><code>simulateState(...)</code> — clone & apply one move</li>
+                <li><code>simulateRandomPlay(...)</code> — random playouts for MCTS</li>
+            </ul>
 
-            <h3><code>getValidMoves(head)</code></h3>
-            <p>Returns adjacent cells not blocked by walls or your body.</p>
-
-            <h3><code>aStar(start, goal)</code></h3>
-            <p>Classic A* with Manhattan heuristic, returns path[] or <code>null</code>.</p>
-
-            <h3><code>isPathSafe(path)</code></h3>
-            <p>Grow the snake along <code>path</code> then check head→tail reachability via BFS.</p>
-
-            <h3><code>isStuckInLoop()</code></h3>
-            <p>Tracks last 200 head positions—if &lt;10 unique and no length gain, triggers <code>restart()</code>.</p>
-
-            <h3><code>simulateState(snake, apple, move)</code></h3>
-            <p>Clones the state, applies one move (grow or pop tail), returns {snake, apple} for planning.</p>
-
-            <h3><code>simulateRandomPlay(state, maxSteps)</code></h3>
-            <p>Simulates random moves up to <code>maxSteps</code>, respawns apples properly—used by MCTS.</p>
-
-            <h2>🎨 Styling & Layout</h2>
-            <p>Flexbox + absolute‐positioned canvases for clean tabs. Dark cards, neon borders.</p>
-            <pre><code>.tabs { display:flex; }
+            <h2 class="text-2xl font-semibold">🎨 Styling & Layout</h2>
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>.tabs { display:flex; }
 .pane { position:absolute; }
 canvas { aspect-ratio:1/1; }</code></pre>
 
-            <h2>🚀 Deploy on GitHub Pages</h2>
-            <pre><code>git init
+            <h2 class="text-2xl font-semibold">🚀 Deploy on GitHub Pages</h2>
+            <pre class="bg-slate-800 text-slate-100 p-4 rounded overflow-x-auto"><code>git init
 git add .
 git commit -m "Snake AI Showdown"
 git remote add origin https://github.com/yourusername/snake-ai-showdown.git
@@ -287,33 +242,125 @@ git push -u origin main</code></pre>
                 <code>yourusername.github.io/snake-ai-showdown</code>.
             </p>
 
-            <h2>🧪 Lessons Learned</h2>
-            <ul>
-                <li>AI = decision rules &amp; planning, not magic</li>
+            <h2 class="text-2xl font-semibold">🧪 Lessons Learned</h2>
+            <ul class="list-disc list-inside space-y-2">
+                <li>AI = decision rules & planning, not magic</li>
                 <li>A* + safety checks beats raw greed</li>
-                <li>Planning (minimax) &amp; chance‐awareness (expectimax) outlast simple heuristics</li>
-                <li>Monte Carlo sampling can approximate complex strategies in JS</li>
-                <li>Loop detection &amp; restarts are crucial for survival</li>
+                <li>Minimax & expectimax outlast simple heuristics</li>
+                <li>Monte Carlo sampling approximates complex strategies</li>
+                <li>Loop detection & restarts are crucial</li>
             </ul>
 
-            <h2>🔮 Next Up: Genetic Algorithms &amp; Beyond</h2>
-            <p>In Part 2, we’ll evolve snakes via a simple GA: genomes of behavior weights, tournaments of survival,
-                breeding the fittest—watch emergent AI without hardcoded rules!</p>
-            <blockquote>Get ready to seed your snakes with DNA and watch evolution unfold in your browser.</blockquote>
+            <h2 class="text-2xl font-semibold">🔮 Next Up: Genetic Algorithms & Beyond</h2>
+            <blockquote>Seed your snakes with DNA and watch evolution unfold in your browser.</blockquote>
 
-            <div class="back-link">
-                <a href="Blog.html">← Back to all posts</a>
+            <a href="blog.html" class="inline-block mt-8 text-blue-400 hover:underline">← Back to all posts</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Let's Conjure Something Epic</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto"></div>
+            <p class="text-xl text-slate-400 mt-6 max-w-2xl mx-auto">
+                I'm always on the lookout for new quests—collaborate, chat, or challenge me to build the next VR dragon
+                simulator!
+            </p>
+        </div>
+
+        <div class="max-w-2xl mx-auto">
+            <div class="card-glass rounded-2xl p-8 hover-grow">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <a href="mailto:tai@ikatzir.com"
+                        class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+                        <i class="fas fa-envelope text-blue-400 text-2xl mb-2"></i>
+                        <span class="text-slate-300">Email</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank"
+                        class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+                        <i class="fab fa-linkedin-in text-blue-400 text-2xl mb-2"></i>
+                        <span class="text-slate-300">LinkedIn</span>
+                    </a>
+                    <a href="https://github.com/ItakatzI" target="_blank"
+                        class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+                        <i class="fab fa-github text-blue-400 text-2xl mb-2"></i>
+                        <span class="text-slate-300">GitHub</span>
+                    </a>
+                    <a href="https://ikatzir.com/quotes-page.html" target="_blank"
+                        class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+                        <i class="fas fa-quote-right text-blue-400 text-2xl mb-2"></i>
+                        <span class="text-slate-300">Quotes</span>
+                    </a>
+                </div>
             </div>
-        </article>
+        </div>
+    </section>
 
-    </main>
-    <footer class="site-footer">
-        <div class="container">
-            <p>© 2025 Katzir. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+                <p class="text-xl font-bold gradient-text center">Katzir</p>
+                <p class="text-slate-500 mt-2">Product & Project Wizard</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="mailto:tai@ikatzir.com" class="text-slate-400 hover:text-white transition">
+                    <i class="fas fa-envelope text-xl"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank"
+                    class="text-slate-400 hover:text-white transition">
+                    <i class="fab fa-linkedin-in text-xl"></i>
+                </a>
+                <a href="https://github.com/ItakatzI" target="_blank"
+                    class="text-slate-400 hover:text-white transition">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+        <div class="mt-8 text-center text-slate-500 text-sm">
+            &copy; <span id="year"></span> Katzir. All spells reserved.
         </div>
     </footer>
 
-    <script src="scripts/include-nav.js"></script>
+    <script>
+        // Mobile menu
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeMenu = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function showMobile() {
+            mobileMenu.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+            mobileMenu.classList.add('translate-y-0', 'opacity-100');
+        }
+        function hideMobile() {
+            mobileMenu.classList.remove('translate-y-0', 'opacity-100');
+            mobileMenu.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+        }
+
+        // Tapping the ☰ button now toggles open/closed
+        menuToggle.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('-translate-y-full')) {
+                showMobile();
+            } else {
+                hideMobile();
+            }
+        });
+
+        // Close button and links still work
+        closeMenu.addEventListener('click', hideMobile);
+        document.querySelectorAll('#mobile-menu a').forEach(a =>
+            a.addEventListener('click', hideMobile)
+        );
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor =>
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+            }));
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>

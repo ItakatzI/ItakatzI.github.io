@@ -2,194 +2,553 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="assets/img/A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png"
-    sizes="64x64">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Itai Katzir • Product & Project Wizard</title>
-  <link rel="stylesheet" href="assets\css\styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="assets/img/A_flat_digital_vector_illustration_of_a_unicorn_he.png" type="image/png" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .card-glass {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hover-grow {
+      transition: transform 0.3s ease;
+    }
+
+    .hover-grow:hover {
+      transform: translateY(-5px);
+    }
+
+    .skill-icon {
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .skill-icon:hover {
+      transform: scale(1.2);
+      color: #38bdf8;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -32px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      z-index: 1;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      background: linear-gradient(to bottom, #38bdf8, #818cf8, #c084fc);
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(129, 140, 248, 0.1));
+      border: 1px solid rgba(129, 140, 248, 0.2);
+    }
+  </style>
 </head>
 
-<body>
-  <div id="nav-placeholder"></div>
-  <div class="container">
-    <header class="header">
-      <h1 id="main-title">👋 Hey there, I’m Katzir</h1>
-      <img id="typing-svg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-        data-src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&duration=3000&pause=500&color=000000&center=true&vCenter=true&width=435&lines=Project+Manager;Product+Manager;VR+Developer;Unity+Enthusiast;Unreal+Explorer;Automation+Lover;Productivity+Nerd"
-        alt="Hover to see roles..." />
-      <p>Master of turning wild ideas into polished realities—and sometimes just chasing squirrels in VR.</p>
+<body class="min-h-screen">
+  <!-- Navigation -->
+  <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="#" class="text-xl font-bold gradient-text">Katzir</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#about" class="text-slate-300 hover:text-white transition">About</a>
+          <a href="#skills" class="text-slate-300 hover:text-white transition">Skills</a>
+          <a href="#experience" class="text-slate-300 hover:text-white transition">Experience</a>
+          <a href="#contact" class="text-slate-300 hover:text-white transition">Contact</a>
+          <a href="blog.html" class="text-slate-300 hover:text-white transition">Notes</a>
+          <a href="quotes-page.html" class="text-slate-300 hover:text-white transition">Quotes</a>
+        </div>
+        <div class="md:hidden flex items-center">
+          <button id="menu-toggle" class="text-slate-300 hover:text-white">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-      <!-- The script for typing SVG is included at the end of the body to avoid variable redeclaration issues. -->
-    </header>
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-md pt-20
+         transform -translate-y-full opacity-0 pointer-events-none
+         transition-all duration-300 ease-in-out">
+    <div class="flex flex-col items-center space-y-8 py-8">
+      <a href="#about" class="text-slate-300 hover:text-white transition">About</a>
+      <a href="#skills" class="text-slate-300 hover:text-white transition">Skills</a>
+      <a href="#experience" class="text-slate-300 hover:text-white transition">Experience</a>
+      <a href="#contact" class="text-slate-300 hover:text-white transition">Contact</a>
+      <a href="blog.html" class="text-slate-300 hover:text-white transition">Notes</a>
+      <a href="quotes-page.html" class="text-slate-300 hover:text-white transition">Quotes</a>
+      <button id="close-menu" class="mt-8 px-6 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition">
+        Close Menu
+      </button>
+    </div>
+  </div>
 
-    <!-- About Me -->
-    <section>
-      <div class="section-title" style="margin-top: 0;">About Me</div>
-      <div class="about">
-        <p>
-          Once upon a time in Jerusalem, I graduated with a BSc in Industrial Engineering &amp; Information Systems,
-          destined for spreadsheets and process charts. But destiny had other plans: I became the wizard behind the
-          curtain at Tohen Media, conjuring streamlined workflows and automations that made teams cheer (and
-          occasionally curse my Python scripts). For the past 3.5 years, I’ve been the CTO &amp; COO of a VR simulation
-          realm, crafting immersive worlds where canine heroes of the IDF’s Oketz unit train, leap, and save the
-          day—sometimes literally.
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">
+        <span class="gradient-text">Katzir</span>
+      </h1>
+      <h2 class="text-2xl md:text-3xl font-medium text-slate-300 mb-8">
+        Product & Project Wizard • VR Alchemist • Automation Sorcerer
+      </h2>
+      <div class="max-w-3xl mx-auto">
+        <p class="text-lg text-slate-400 mb-8">
+          Crafting digital realms where canine heroes train, automating workflows with Python spells, and occasionally
+          writing Hebrew ballads about IT infrastructure.
         </p>
-        <p>
-          When I’m not building digital kingdoms, you might find me scribbling Hebrew lyrics for an epic ballad,
+        <div class="flex justify-center space-x-4">
+          <a href="#contact"
+            class="px-6 py-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-medium transition hover-grow">
+            Conjure Something Together
+          </a>
+          <a href="#experience"
+            class="px-6 py-3 rounded-full border border-blue-500 text-blue-400 hover:bg-blue-500/10 font-medium transition hover-grow">
+            View My Grimoire
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="stat-card rounded-xl p-6 text-center hover-grow">
+        <div class="text-3xl font-bold gradient-text mb-2">7+</div>
+        <div class="text-slate-400">Years of Tech Sorcery</div>
+      </div>
+      <div class="stat-card rounded-xl p-6 text-center hover-grow">
+        <div class="text-3xl font-bold gradient-text mb-2">50+</div>
+        <div class="text-slate-400">Automation Spells Cast</div>
+      </div>
+      <div class="stat-card rounded-xl p-6 text-center hover-grow">
+        <div class="text-3xl font-bold gradient-text mb-2">120+</div>
+        <div class="text-slate-400">Board Game Battles Won</div>
+      </div>
+      <div class="stat-card rounded-xl p-6 text-center hover-grow">
+        <div class="text-3xl font-bold gradient-text mb-2">30M</div>
+        <div class="text-slate-400">Cups of Coffee Conquered</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">About Me</h2>
+      <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div class="card-glass rounded-2xl p-8 hover-grow">
+        <p class="text-lg text-slate-300 mb-6">
+          Once upon a time in Jerusalem, I graduated with a BSc in Industrial Engineering & Information Systems,
+          destined for spreadsheets and process charts. But destiny had other plans...
+        </p>
+        <p class="text-lg text-slate-300 mb-6">
+          I became the wizard behind the curtain at Tohen Media, conjuring streamlined workflows and automations that
+          made teams cheer (and occasionally curse my Python scripts).
+        </p>
+        <p class="text-lg text-slate-300">
+          For the past 3.5 years, I've been the CTO & COO of a VR simulation realm, crafting immersive worlds where
+          canine heroes of the IDF's Oketz unit train, leap, and save the day—sometimes literally.
+        </p>
+      </div>
+      <div class="card-glass rounded-2xl p-8 hover-grow">
+        <p class="text-lg text-slate-300 mb-6">
+          When I'm not building digital kingdoms, you might find me scribbling Hebrew lyrics for an epic ballad,
           researching trauma centers across Israel (because why not?), or experimenting with friendly gluten-free juice
           blends that taste only slightly like sadness.
         </p>
-      </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section>
-      <div class="section-title">Skills &amp; Expertise</div>
-      <ul class="skills-list">
-        <li>⚔️ Project &amp; Product Quest Mastery</li>
-        <li>🕹️ VR &amp; Game Alchemy (Unity, Unreal)</li>
-        <li>🗡️ Procedural Meme Conjuror</li>
-        <li>🤖 Automation Spells &amp; Productivity Charms (Python, Bash, Zapier)</li>
-        <li>🧠 Systems Thinking &amp; Process Potion Brewing</li>
-        <li>🐾 Schrödinger’s Code Manifesting (yes, sometimes it’s both broken and fixed)</li>
-        <li>🪄 Generative AI Whispering &amp; Prompt Necromancy</li>
-        <li>🦄 Agile Unicorn Development & Scrum Circles</li>
-      </ul>
-    </section>
-
-    <!-- Experience Section -->
-    <section>
-      <div class="section-title">Experience Highlights</div>
-      <div class="experience">
-        <div class="exp-item">
-          <h3>🛡️ CPO, Magnifica VR (2022–Present)</h3>
-          <p>
-            In a land not so far away, I helm the technological ship of a VR simulation empire that trains the bravest
-            canine soldiers of IDF’s Oketz unit. I architect modular simulation frameworks in Unreal Engine, rally a
-            squad of developers, artists, and coffee-fueled interns, and deliver training worlds on schedule—while
-            occasionally convincing my team that talking goats for stress-relief modules are Totally A Good Idea. The
-            result? Canine commandos leap through virtual walls, sniff out hidden threats, and I get to call my job
-            “saving the world, one pixel at a time.”
-          </p>
-        </div>
-        <div class="exp-item">
-          <h3>🏰 CTO, Tohen Media (2018–2022)</h3>
-          <p>
-            As Tohen Media’s resident tech warlock, I orchestrated web marketing spellbooks and scaled a legion of
-            engineers. I introduced automation rituals that boosted efficiency by a mythical 40%, tamed cross-team
-            dragons with perfectly plotted roadmaps, and occasionally slipped into Python-induced debugging trance—rumor
-            has it I once wrote a script that baked virtual cookies at 2 AM. My proudest feat: convincing everyone that
-            “yes, Jenkins pipelines are fun.”
-          </p>
-        </div>
-        <div class="exp-item">
-          <h3>💻 IT Specialist, Mashovit (2012–2018)</h3>
-          <p>
-            In the wild world of Mashovit’s IT jungle, I was the fearless network whisperer—taming rogue servers at
-            dawn, convincing the office that “Yes, you actually need six different backups,” and deploying software
-            updates faster than you can say “blue screen of death.” I architected infrastructure solutions that kept
-            data flowing like a perfectly brewed cup of coffee, wrote scripts to automate tedious tasks (because nobody
-            should manually reboot eighteen virtual machines at 2 AM), and even managed to charm the CFO into upgrading
-            our dusty switch rack by promising “fewer alarm calls at midnight.” All in all, I fell deeper in love with
-            the IT craft—every cable run and server rack only fueling my passion to build rock-solid systems that
-            (almost) never sleep.
-          </p>
-        </div>
-
-        <div class="exp-item">
-          <h3>🎓 BSc in Industrial Engineering &amp; Information Systems, Jerusalem College of Engineering (2014–2018)
-          </h3>
-          <p>
-            I graduated with honors and a backpack full of dreams (and caffeine stains). My senior project was a
-            logistics simulation tool that predicted the future, or at least predicted where boxes should go. I
-            specialized in process optimization so intense, people joked I tried to streamline my own sleep schedule
-            (spoiler: it didn’t work). This foundation forged my love for systems thinking, and even today, I can’t help
-            but diagram the path of my morning coffee from bean to cup.
-          </p>
+        <div class="mt-8">
+          <h3 class="text-xl font-bold text-white mb-4">What I'm Passionate About</h3>
+          <ul class="space-y-2">
+            <li class="flex items-center">
+              <i class="fas fa-book text-blue-400 mr-3"></i>
+              <span class="text-slate-300">Lifelong Learning & Curious Exploration</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-cogs text-purple-400 mr-3"></i>
+              <span class="text-slate-300">Inventing Quirky Automation Hacks</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-dice text-blue-400 mr-3"></i>
+              <span class="text-slate-300">Epic Board Game Showdowns</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-globe text-purple-400 mr-3"></i>
+              <span class="text-slate-300">Wandering New Horizons & Cultures</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-pen-fancy text-blue-400 mr-3"></i>
+              <span class="text-slate-300">Writing Experimentation & Poem Butchery</span>
+            </li>
+          </ul>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Passions Section -->
-    <section>
-      <div class="section-title">What I’m Passionate About</div>
-      <ul class="passions-list">
-        <li><span class="emoji">📚</span>Lifelong Learning & Curious Exploration</li>
-        <li><span class="emoji">⚙️</span>Inventing Quirky Automation Hacks</li>
-        <li><span class="emoji">🎲</span>Epic Board Game Showdowns</li>
-        <li><span class="emoji">🌍</span>Wandering New Horizons & Cultures</li>
-        <li><span class="emoji">📝</span> Writing Experimentation &amp; Poem Butchery</li>
-      </ul>
-    </section>
+  <!-- Skills Section -->
+  <section id="skills" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Skills & Expertise</h2>
+      <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto"></div>
+    </div>
 
-    <!-- Stats Section -->
-    <section>
-      <div class="section-title">Stats</div>
-      <div class="stats">
-        <div class="stat-block">
-          <div class="number">7+</div>
-          <div class="label">Years of Tech Sorcery</div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="card-glass rounded-xl p-6 text-center hover-grow">
+        <div class="text-4xl mb-4 text-blue-400 skill-icon">
+          <i class="fas fa-hat-wizard"></i>
         </div>
-        <div class="stat-block">
-          <div class="number">50+</div>
-          <div class="label">Automation Spells Cast</div>
+        <h3 class="text-xl font-bold text-white mb-2">Project & Product Quest Mastery</h3>
+        <p class="text-slate-400">Leading projects from concept to reality with strategic vision</p>
+      </div>
+
+      <div class="card-glass rounded-xl p-6 text-center hover-grow">
+        <div class="text-4xl mb-4 text-purple-400 skill-icon">
+          <i class="fas fa-vr-cardboard"></i>
         </div>
-        <div class="stat-block">
-          <div class="number">120+</div>
-          <div class="label">Board Game Battles Won</div>
+        <h3 class="text-xl font-bold text-white mb-2">VR & Game Alchemy</h3>
+        <p class="text-slate-400">Unity, Unreal Engine wizardry for immersive experiences</p>
+      </div>
+
+      <div class="card-glass rounded-xl p-6 text-center hover-grow">
+        <div class="text-4xl mb-4 text-blue-400 skill-icon">
+          <i class="fas fa-robot"></i>
         </div>
-        <div class="stat-block">
-          <div class="number">30M</div>
-          <div class="label">Cups of Coffee Conquered</div>
+        <h3 class="text-xl font-bold text-white mb-2">Automation Spells</h3>
+        <p class="text-slate-400">Python, Bash, Zapier magic to eliminate tedious tasks</p>
+      </div>
+
+      <div class="card-glass rounded-xl p-6 text-center hover-grow">
+        <div class="text-4xl mb-4 text-purple-400 skill-icon">
+          <i class="fas fa-project-diagram"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Systems Thinking</h3>
+        <p class="text-slate-400">Process optimization and complex system architecture</p>
+      </div>
+
+      <div class="card-glass rounded-xl p-6 text-center hover-grow">
+        <div class="text-4xl mb-4 text-blue-400 skill-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Schrödinger's Code</h3>
+        <p class="text-slate-400">Writing code that's both broken and fixed simultaneously</p>
+      </div>
+
+      <div class="card-glass rounded-xl p-6 text-center hover-grow">
+        <div class="text-4xl mb-4 text-purple-400 skill-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">AI Whispering</h3>
+        <p class="text-slate-400">Generative AI & prompt engineering mastery</p>
+      </div>
+
+      <div class="card-glass rounded-xl p-6 text-center hover-grow">
+        <div class="text-4xl mb-4 text-blue-400 skill-icon">
+          <i class="fas fa-tasks"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Agile Development</h3>
+        <p class="text-slate-400">Scrum, Kanban, and other mystical methodologies</p>
+      </div>
+
+      <div class="card-glass rounded-xl p-6 text-center hover-grow">
+        <div class="text-4xl mb-4 text-purple-400 skill-icon">
+          <i class="fas fa-magic"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Procedural Magic</h3>
+        <p class="text-slate-400">Conjuring memes and content with algorithmic sorcery</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Experience Highlights</h2>
+      <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto"></div>
+    </div>
+
+    <div class="relative max-w-3xl mx-auto">
+      <div class="space-y-8 timeline">
+        <!-- Magnifica VR -->
+        <div class="relative pl-12 timeline-item">
+          <div class="card-glass rounded-xl p-8 hover-grow">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mr-4">
+                <i class="fas fa-shield-alt text-blue-400 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">CPO, Magnifica VR</h3>
+                <p class="text-blue-400">2022–Present</p>
+              </div>
+            </div>
+            <p class="text-slate-300 mb-4">
+              In a land not so far away, I helm the technological ship of a VR simulation empire that trains the bravest
+              canine soldiers of IDF's Oketz unit.
+            </p>
+            <ul class="list-disc list-inside text-slate-400 space-y-2">
+              <li>Architect modular simulation frameworks in Unreal Engine</li>
+              <li>Lead a squad of developers, artists, and coffee-fueled interns</li>
+              <li>Deliver training worlds on schedule while maintaining sanity</li>
+              <li>Convince teams that talking goats for stress-relief are Totally A Good Idea</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tohen Media -->
+        <div class="relative pl-12 timeline-item">
+          <div class="card-glass rounded-xl p-8 hover-grow">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mr-4">
+                <i class="fas fa-hat-wizard text-purple-400 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">CTO, Tohen Media</h3>
+                <p class="text-purple-400">2018–2022</p>
+              </div>
+            </div>
+            <p class="text-slate-300 mb-4">
+              As Tohen Media's resident tech warlock, I orchestrated web marketing spellbooks and scaled a legion of
+              engineers.
+            </p>
+            <ul class="list-disc list-inside text-slate-400 space-y-2">
+              <li>Introduced automation rituals that boosted efficiency by 40%</li>
+              <li>Tamed cross-team dragons with perfectly plotted roadmaps</li>
+              <li>Wrote Python scripts that occasionally baked virtual cookies at 2 AM</li>
+              <li>Convinced everyone that "yes, Jenkins pipelines are fun"</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Mashovit -->
+        <div class="relative pl-12 timeline-item">
+          <div class="card-glass rounded-xl p-8 hover-grow">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mr-4">
+                <i class="fas fa-network-wired text-blue-400 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">IT Specialist, Mashovit</h3>
+                <p class="text-blue-400">2012–2018</p>
+              </div>
+            </div>
+            <p class="text-slate-300 mb-4">
+              In the wild world of Mashovit's IT jungle, I was the fearless network whisperer.
+            </p>
+            <ul class="list-disc list-inside text-slate-400 space-y-2">
+              <li>Tamed rogue servers at dawn and deployed updates faster than BSOD</li>
+              <li>Architected infrastructure solutions that kept data flowing like coffee</li>
+              <li>Wrote scripts to automate tedious tasks (because 2 AM VM reboots are evil)</li>
+              <li>Charmed CFOs into upgrading infrastructure with promises of sleep</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="relative pl-12 timeline-item">
+          <div class="card-glass rounded-xl p-8 hover-grow">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mr-4">
+                <i class="fas fa-graduation-cap text-purple-400 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">BSc in Industrial Engineering & Information Systems</h3>
+                <p class="text-purple-400">Jerusalem College of Engineering, 2014–2018</p>
+              </div>
+            </div>
+            <p class="text-slate-300 mb-4">
+              Graduated with honors and a backpack full of dreams (and caffeine stains).
+            </p>
+            <ul class="list-disc list-inside text-slate-400 space-y-2">
+              <li>Senior project: A logistics simulation tool that predicted the future (or at least box locations)</li>
+              <li>Specialized in process optimization so intense, I tried to streamline my sleep schedule</li>
+              <li>Forged my love for systems thinking and diagramming coffee paths from bean to cup</li>
+            </ul>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Contact Section -->
-    <section class="contact">
-      <div class="section-title">📬 Let’s Conjure Something Epic</div>
-      <p>I’m always on the lookout for new quests—collaborate, chat, or challenge me to build the next VR dragon
-        simulator!</p>
-      <p>
-        <a href="mailto:tai@ikatzir.com" class="button">📧 Email Me</a>
-        <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank" rel="noopener noreferrer" class="button">💼
-          LinkedIn</a>
-        <a href="https://github.com/ItakatzI" target="_blank" rel="noopener noreferrer" class="button">🐱‍💻 GitHub</a>
-        <a href="quotes-page.html" class="button">💬 Latest Quote</a>
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Let's Conjure Something Epic</h2>
+      <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto"></div>
+      <p class="text-xl text-slate-400 mt-6 max-w-2xl mx-auto">
+        I'm always on the lookout for new quests—collaborate, chat, or challenge me to build the next VR dragon
+        simulator!
       </p>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer style="margin-top: 2rem; font-size: 0.9rem; color: #777777;">
-      &copy; <span id="year"></span> Itai Katzir. All rights reserved.
-    </footer>
-  </div>
+    <div class="max-w-2xl mx-auto">
+      <div class="card-glass rounded-2xl p-8 hover-grow">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <a href="mailto:tai@ikatzir.com"
+            class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+            <i class="fas fa-envelope text-blue-400 text-2xl mb-2"></i>
+            <span class="text-slate-300">Email</span>
+          </a>
+          <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank"
+            class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+            <i class="fab fa-linkedin-in text-blue-400 text-2xl mb-2"></i>
+            <span class="text-slate-300">LinkedIn</span>
+          </a>
+          <a href="https://github.com/ItakatzI" target="_blank"
+            class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+            <i class="fab fa-github text-blue-400 text-2xl mb-2"></i>
+            <span class="text-slate-300">GitHub</span>
+          </a>
+          <a href="https://ikatzir.com/quotes-page.html" target="_blank"
+            class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition">
+            <i class="fas fa-quote-right text-blue-400 text-2xl mb-2"></i>
+            <span class="text-slate-300">Quotes</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- ==== JavaScript ==== -->
+  <!-- Footer -->
+  <footer class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-6 md:mb-0">
+        <p class="text-xl font-bold gradient-text center">Katzir</p>
+        <p class="text-slate-500 mt-2">Product & Project Wizard</p>
+      </div>
+      <div class="flex space-x-6">
+        <a href="mailto:tai@ikatzir.com" class="text-slate-400 hover:text-white transition">
+          <i class="fas fa-envelope text-xl"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/itai-katzir/" target="_blank"
+          class="text-slate-400 hover:text-white transition">
+          <i class="fab fa-linkedin-in text-xl"></i>
+        </a>
+        <a href="https://github.com/ItakatzI" target="_blank" class="text-slate-400 hover:text-white transition">
+          <i class="fab fa-github text-xl"></i>
+        </a>
+      </div>
+    </div>
+    <div class="mt-8 text-center text-slate-500 text-sm">
+      &copy; <span id="year"></span> Katzir. All spells reserved.
+    </div>
+  </footer>
+
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const closeMenu = document.getElementById('close-menu');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-    // On first hover, set the src of the img; then CSS handles fading in/out
-    const titleEl = document.getElementById("main-title");
-    const typingImg = document.getElementById("typing-svg");
-    const svgUrl = typingImg.getAttribute("data-src");
-    let isLoaded = false;
+    function showMobile() {
+      mobileMenu.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+      mobileMenu.classList.add('translate-y-0', 'opacity-100');
+    }
+    function hideMobile() {
+      mobileMenu.classList.remove('translate-y-0', 'opacity-100');
+      mobileMenu.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+    }
 
-    titleEl.addEventListener("mouseenter", () => {
-      if (!isLoaded) {
-        typingImg.setAttribute("src", svgUrl);
-        isLoaded = true;
+    // Tapping the ☰ button now toggles open/closed
+    menuToggle.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('-translate-y-full')) {
+        showMobile();
+      } else {
+        hideMobile();
       }
-      // CSS :hover rule will fade opacity to 1
     });
 
-    titleEl.addEventListener("mouseleave", () => {
-      // CSS :hover rule will fade opacity back to 0
+    // Close button and links still work
+    closeMenu.addEventListener('click', hideMobile);
+    document.querySelectorAll('#mobile-menu a').forEach(a =>
+      a.addEventListener('click', hideMobile)
+    );
+
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Form submission (placeholder)
+    const form = document.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Message sent! (This is a demo - no message was actually sent)');
+        form.reset();
+      });
+    }
+
+    // Add animation class when elements come into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fadeIn');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.hover-grow').forEach(el => {
+      observer.observe(el);
     });
   </script>
-  <script src="scripts/include-nav.js"></script>
 </body>
 
 </html>
