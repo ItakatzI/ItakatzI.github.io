@@ -104,3 +104,4 @@
 # People are weird. When we find someone with weirdness that is compatible with ours, we team up and call it love. - Dr. Seuss
 # Try not to become a man of success, but rather try to become a man of value. - Albert Einstein
 # A pessimist sees the difficulty in every opportunity; an optimist sees the opportunity in every difficulty. - Winston Churchill
+# Evil is whatever distracts.  - Franz Kafka
