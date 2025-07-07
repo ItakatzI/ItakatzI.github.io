@@ -18,10 +18,27 @@
     }
 
     .gradient-text {
-      background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+      background: linear-gradient(270deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
+      /* looping gradient */
+      background-size: 600% 600%;
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      animation: gradient-flow 20s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    }
+
+    @keyframes gradient-flow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     .card-glass {
@@ -476,6 +493,18 @@
   </footer>
 
   <script>
+    const variants = [
+      '20s ease-in',
+      '18s ease-out',
+      '25s ease-in-out',
+      '22s linear',
+      '19s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+    ];
+
+    document.querySelectorAll('.gradient-text').forEach(el => {
+      const rand = variants[Math.floor(Math.random() * variants.length)];
+      el.style.animation = `gradient-flow ${rand} infinite`;
+    });
     // Mobile menu toggle
     const menuToggle = document.getElementById('menu-toggle');
     const closeMenu = document.getElementById('close-menu');
